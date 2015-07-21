@@ -1,0 +1,16 @@
+<phpunit colors="true" backupGlobals="false" bootstrap="tests/bootstrap.php" >
+    <testsuites>
+        <testsuite name="Unit">
+            <directory>./tests/unit</directory>
+        </testsuite>
+    </testsuites>
+     <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">src</directory>
+        </whitelist>
+    </filter>
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="date.timezone" value="UTC"/>
+    </php>
+</phpunit>

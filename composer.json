@@ -1,0 +1,26 @@
+{
+    "name": "monii/aggregate-event-storage",
+    "description": "Aggregate Event Storage",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Beau Simensen",
+            "email": "beau@dflydev.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Monii\\AggregateEventStorage\\": "src/Monii/AggregateEventStorage"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^4.7",
+        "squizlabs/php_codesniffer": "^2.3"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Monii\\AggregateEventStorage\\": "tests/unit/Monii/AggregateEventStorage"
+        }
+    }
+}
