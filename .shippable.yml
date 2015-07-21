@@ -3,6 +3,8 @@ language: php
 php:
   - 5.6
 
+build_image: shippableimages/ubuntu1404_php
+
 env:
   global:
     - PROJECT=monii-aggregate-event-storage
@@ -13,6 +15,11 @@ env:
 branches:
   only:
     - master
+
+before_install:
+  - export PATH=$HOME/.phpenv/bin:$HOME/.phpenv/extensions:$PATH && eval "$(phpenv init -)"
+  - phpenv global $SHIPPABLE_PHP_VERSION
+  - php --version
 
 before_script:
   - mkdir -p $CI_REPORTS
