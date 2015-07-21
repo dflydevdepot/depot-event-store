@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate;
 
-//use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangeExtractor;
+use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangeExtractor;
 use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangeClearor;
 /*use Monii\AggregateEventStorage\Aggregate\Identification\PublicMethodIdentifier;
 use Monii\AggregateEventStorage\Aggregate\Instantiation\NamedConstructorInstantiator;
@@ -13,7 +13,6 @@ use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
 use Monii\AggregateEventStorage\Fixtures\Banking\Common\BankingEventEnvelope;*/
 use Monii\AggregateEventStorage\Aggregate\Support\ChangesClearing\AggregateChangesClearing;
-use Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AggregateManipulatorTest extends TestCase
@@ -24,7 +23,7 @@ class AggregateManipulatorTest extends TestCase
         var_dump($this->getMock('\\Monii\\AggregateEventStorage\\Aggregate\\Support\\ChangesClearing\\AggregateChangesClearing') instanceOf AggregateChangesClearing);
     }*/
 
-    public function testHappyGetClearAggregatesCalledOnce()
+    public function testHappyChangeClearorCalledOnce()
     {
         // Create a mock of AggregateChangesClearing
         // only mock the clearAggregateChanges() method.
@@ -41,13 +40,41 @@ class AggregateManipulatorTest extends TestCase
     }
 
     /** @expectedException AggregateNotSupported */
-    public function testUnhappyGetClearAggregatesCalledOnce()
+    public function testUnhappyChangeClearorCalledOnce()
     {
+        $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
+
         $object = new \DateTimeImmutable();
 
         $changeClearor = new PublicMethodChangeClearor();
         $changeClearor->clearChanges($object);
+    }
 
+    public function testHappyChangeExtractorCalledOnce()
+    {
+        // Create a mock of AggregateChangesClearing
+        // only mock the clearAggregateChanges() method.
+        $object = $this
+            ->getMockBuilder('Monii\AggregateEventStorage\Aggregate\Support\ChangesExtraction\AggregateChangesRecording')
+            ->setMethods(array('getAggregateChanges'))
+            ->getMock();
+        // We only expect the clearAggregateChanges method to be called once
+        $object->expects($this->once())->method('getAggregateChanges');
+
+        $changeExtractor = new PublicMethodChangeExtractor();
+        $changeExtractor->extractChanges($object);
+
+    }
+
+    /** @expectedException AggregateNotSupported */
+    public function testUnhappyChangeExtractorCalledOnce()
+    {
+        $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
+
+        $object = new \DateTimeImmutable();
+
+        $changeExtractor = new PublicMethodChangeExtractor();
+        $changeExtractor->extractChanges($object);
     }
 
 
