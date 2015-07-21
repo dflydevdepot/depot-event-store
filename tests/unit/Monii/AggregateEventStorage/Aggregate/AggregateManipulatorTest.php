@@ -14,6 +14,8 @@ use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
 use Monii\AggregateEventStorage\Fixtures\Banking\Common\BankingEventEnvelope;*/
 use Monii\AggregateEventStorage\Aggregate\Support\ChangesClearing\AggregateChangesClearing;
 use Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported;
+use Monii\AggregateEventStorage\Aggregate\Reconstitution\PublicMethodReconstituter;
+use Monii\AggregateEventStorage\Aggregate\Identification\PublicMethodIdentifier;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AggregateManipulatorTest extends TestCase
@@ -40,9 +42,11 @@ class AggregateManipulatorTest extends TestCase
 
     }
 
+
     /** @expectedException AggregateNotSupported */
     public function testUnhappyGetClearAggregatesCalledOnce()
     {
+        $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
         $object = new \DateTimeImmutable();
 
         $changeClearor = new PublicMethodChangeClearor();
@@ -138,4 +142,48 @@ class AggregateManipulatorTest extends TestCase
 
         $this->assertEquals('fixture-account-000', $accountId);
     }*/
+
+    public function testHappyReconstitution()
+    {
+        $object = $this
+            ->getMockBuilder('Monii\AggregateEventStorage\Aggregate\Support\Reconstitution\AggregateReconstitution')
+            ->setMethods(array('reconstituteAggregateFrom'))
+            ->getMock();
+        $object->expects($this->once())->method('reconstituteAggregateFrom');
+        $reconstituter = new PublicMethodReconstituter();
+        $reconstituter->reconstitute($object, array());
+    }
+
+    /** @expectedException AggregateNotSupported */
+    public function testUnhappyReconstitution()
+    {
+        $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
+        $object = new \DateTimeImmutable();
+
+        $reconstituter = new PublicMethodReconstituter();
+        $reconstituter->reconstitute($object, array());
+
+    }
+
+    public function testHappyIdentification()
+    {
+        $object = $this
+            ->getMockBuilder('Monii\AggregateEventStorage\Aggregate\Support\Identification\AggregateIdentity')
+            ->setMethods(array('getAggregateIdentity'))
+            ->getMock();
+        $object->expects($this->once())->method('getAggregateIdentity');
+        $identity = new PublicMethodIdentifier();
+        $identity->identify($object);
+    }
+
+    /** @expectedException AggregateNotSupported */
+    public function testUnhappyIdentification()
+    {
+        $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
+        $object = new \DateTimeImmutable();
+
+        $identity = new PublicMethodIdentifier();
+        $identity->identify($object);
+
+    }
 }
