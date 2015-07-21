@@ -79,6 +79,21 @@ class AggregateManipulatorTest extends TestCase
         $changeExtractor->extractChanges($object);
     }
 
+    public function testCustomClassAndMethod()
+    {
+        $object = new PublicMethodChangeClearorCustomAggregateSpy;
+
+        $changeClearor = new PublicMethodChangeClearor(
+            // first arg is the method to call
+            'customClearMethod',
+
+            // second arg is the type of object we are expecting
+            PublicMethodChangeClearorCustomAggregateSpy::class
+        );
+
+        $changeClearor->clearChanges($object);
+    }
+
 
     /*
     protected function getAccountFixture()
@@ -210,5 +225,34 @@ class AggregateManipulatorTest extends TestCase
         $identity = new PublicMethodIdentifier();
         $identity->identify($object);
 
+    }
+}
+
+class PublicMethodChangeClearorCustomAggregateSpy {
+
+    private $clearWasCalledCount = 0;
+
+    public function __construct()
+    {
+    }
+
+    public function customClearMethod()
+    {
+        // We are spying to see how many times this gets called...
+        $this->clearWasCalledCount++;
+    }
+
+    public function assertCalledOnlyOnce(TestCase $test)
+    {
+        if (1 === $this->clearWasCalledCount) {
+            // Yay!
+            return;
+        }
+
+        if (0 === $this->clearWasCalledCount) {
+            $test->fail('Clear method was never called!');
+        }
+
+        $test->fail('Clear method was called more times than we expected!');
     }
 }
