@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\ChangeReading;
 
-class ChangeIsEventReader
+class ChangeIsEventReader implements ChangeReader
 {
     public function readEvent($change) {
 

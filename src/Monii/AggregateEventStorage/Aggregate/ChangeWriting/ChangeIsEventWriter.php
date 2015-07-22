@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\ChangeWriting;
 
-class ChangeIsEventWriter
+class ChangeIsEventWriter implements ChangeWriter
 {
     public function writeChange($event, $metadata = null)
     {
