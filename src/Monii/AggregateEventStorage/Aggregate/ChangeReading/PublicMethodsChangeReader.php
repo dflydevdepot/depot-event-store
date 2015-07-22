@@ -2,15 +2,11 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\ChangeReading;
 
+use Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported;
 use Monii\AggregateEventStorage\Aggregate\Support\ChangeReading\AggregateChangeReader;
 
 class PublicMethodsChangeReader implements ChangeReader
 {
-    /**
-     * @var string
-     */
-    private $readEventIdMethodName;
-
     /**
      * @var string
      */
@@ -30,12 +26,10 @@ class PublicMethodsChangeReader implements ChangeReader
      * @param string $extractChangesMethod popRecordedChanges
      */
     public function __construct(
-        $readEventIdMethodName = 'getAggregateEventId',
         $readEventMethodName = 'getAggregateEvent',
         $readMetadataMethodName = 'getAggregateMetadata',
         $supportedObjectType = AggregateChangeReader::class
     ) {
-        $this->readEventIdMethodName = $readEventIdMethodName;
         $this->readEventMethodName = $readEventMethodName;
         $this->readMetadataMethodName = $readMetadataMethodName;
         $this->supportedObjectType = $supportedObjectType;
@@ -44,15 +38,11 @@ class PublicMethodsChangeReader implements ChangeReader
     /**
      * {@inheritdoc}
      */
-    public function readEventId($change)
-    {
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function readEvent($change)
     {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->readEventMethodName]);
     }
 
     /**
@@ -60,5 +50,20 @@ class PublicMethodsChangeReader implements ChangeReader
      */
     public function readMetadata($change)
     {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->readMetadataMethodName]);
+    }
+
+    private function assertObjectIsSupported($object)
+    {
+        if ($object instanceof $this->supportedObjectType) {
+            return;
+        }
+
+        throw AggregateNotSupported::becauseObjectHasAnUnexpectedType(
+            $object,
+            $this->supportedObjectType
+        );
     }
 }
