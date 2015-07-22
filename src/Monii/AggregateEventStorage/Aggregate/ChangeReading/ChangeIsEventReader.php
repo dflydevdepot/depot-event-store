@@ -4,12 +4,12 @@ namespace Monii\AggregateEventStorage\Aggregate\ChangeReading;
 
 class ChangeIsEventReader
 {
-    public function getEvent($change) {
+    public function readEvent($change) {
 
         return $change;
     }
 
-    public function getMetadata($change) {
+    public function readMetadata($change) {
 
         return null;
 

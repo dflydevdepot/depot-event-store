@@ -12,6 +12,6 @@ class ChangeIsEventReaderTest extends TestCase
 
         $passthrough = new ChangeIsEventReader;
 
-        $this->assertEquals($original_event, $passthrough->getEvent($original_event));
+        $this->assertEquals($original_event, $passthrough->readEvent($original_event));
     }
 }
