@@ -48,7 +48,7 @@ class AggregateChangeManipulatorTest extends TestCase
     {
         return new AggregateChangeManipulator(
             new PublicMethodsChangeReader(),
-            new NamedConstructorChangeWriter()
+            new NamedConstructorChangeWriter(BankingEventEnvelope::class)
         );
     }
 
@@ -74,10 +74,10 @@ class AggregateChangeManipulatorTest extends TestCase
 
     public function testWriteChange()
     {
-        $original_event = $this->getAccountFixtureEvents()[0];
+        $event = new AccountWasOpened('fixture-account-000', 50);
+        $eventEnvelope = BankingEventEnvelope::create($event);
+        $change = $this->getAggregateChangeManipulator()->writeChange($event);
 
-        $passthrough = new ChangeIsEventWriter;
-
-        $this->assertEquals($original_event, $passthrough->writeChange($original_event));
+        $this->assertEquals($eventEnvelope, $change);
     }
 }

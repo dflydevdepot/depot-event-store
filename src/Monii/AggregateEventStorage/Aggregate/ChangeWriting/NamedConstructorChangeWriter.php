@@ -9,19 +9,19 @@ class NamedConstructorChangeWriter implements ChangeWriter
     /**
      * @var string
      */
-    private $staticConstructorMethodName;
+    private $changeClassName;
 
     /**
      * @var string
      */
-    private $changeClassName;
+    private $staticConstructorMethodName;
 
     public function __construct(
-        $staticConstructorMethod = 'instantiateAggregateChangeFromEventAndMetadata',
-        $changeClassName = null
+        $changeClassName,
+        $staticConstructorMethod = 'instantiateAggregateChangeFromEventAndMetadata'
     ) {
-        $this->staticConstructorMethodName = $staticConstructorMethod;
         $this->changeClassName = $changeClassName;
+        $this->staticConstructorMethodName = $staticConstructorMethod;
     }
 
     /**
