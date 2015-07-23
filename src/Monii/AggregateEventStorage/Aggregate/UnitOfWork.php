@@ -8,6 +8,7 @@ use Monii\AggregateEventStorage\Contract\ContractResolver;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\EventIdentity\EventIdGenerator;
 use Monii\AggregateEventStorage\EventStore\EventStore;
+use Monii\AggregateEventStorage\EventStore\StreamIdentity\StreamId;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
 class UnitOfWork
@@ -18,9 +19,9 @@ class UnitOfWork
     private $eventStore;
 
     /**
-     * @var Contract
+     * @var StreamId
      */
-    private $stream;
+    private $streamId;
 
     /**
      * @var AggregateManipulator
@@ -53,6 +54,7 @@ class UnitOfWork
         AggregateManipulatorTest $aggregateManipulator,
         AggregateChangeManipulator $aggregateChangeManipulator,
         ContractResolver $eventContractResolver,
+        ContractResolver $metadataContractResolver,
         EventIdGenerator $eventIdGenerator = null
     ) {
         $this->eventStore = $eventStore;
@@ -60,6 +62,7 @@ class UnitOfWork
         $this->aggregateManipulator = $aggregateManipulator;
         $this->aggregateChangeManipulator = $aggregateChangeManipulator;
         $this->eventContractResolver = $eventContractResolver;
+        $this->metadataContractResolver = $metadataContractResolver;
         $this->eventIdGenerator = $eventIdGenerator;
     }
 
@@ -128,14 +131,15 @@ class UnitOfWork
             $metadata = $this->aggregateChangeManipulator->readMetadata($change);
 
             $eventEnvelopes[] = new EventEnvelope(
-                $this->eventContractResolver->resolveFromClassName(get_class($event)),
+                $this->eventContractResolver->resolveFromObject($event),
                 $eventId,
                 $event,
+                $this->metadataContractResolver->resolveFromObject($metadata),
                 $metadata
             );
         }
 
-        $eventStream = $this->eventStore->createAggregateStream($this->stream, $aggregateType, $aggregateId);
+        $eventStream = $this->eventStore->createAggregateStream($this->streamId, $aggregateType, $aggregateId);
         $eventStream->appendAll($eventEnvelopes);
         $eventStream->commit($commitId);
 
@@ -164,6 +168,8 @@ class UnitOfWork
     /**
      * @param Contract $aggregateType
      * @param string $aggregateId
+     *
+     * @return mixed
      */
     private function findTrackedAggregate(Contract $aggregateType, $aggregateId)
     {
@@ -205,14 +211,13 @@ class UnitOfWork
     private function findPersistedAggregate(Contract $aggregateType, $aggregateId)
     {
         $eventStream = $this->eventStore->openAggregateInstanceStream(
-            $this->stream,
+            $this->streamId,
             $aggregateType,
             $aggregateId
         );
 
         $events = array_map(function (EventEnvelope $eventEnvelope) {
             return $this->aggregateChangeManipulator->writeChange(
-                $eventEnvelope->getEventId(),
                 $eventEnvelope->getEvent(),
                 $eventEnvelope->getMetadata()
             );

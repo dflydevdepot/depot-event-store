@@ -17,4 +17,11 @@ interface ContractResolver
      * @return Contract
      */
     public function resolveFromClassName($className);
+
+    /**
+     * @param $object
+     *
+     * @return Contract|null
+     */
+    public function resolveFromObject($object = null);
 }

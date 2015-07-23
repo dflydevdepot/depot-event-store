@@ -55,6 +55,7 @@ class InMemoryPersistence implements Persistence
                 $record->eventType,
                 $record->eventId,
                 $record->event,
+                $record->metadataType,
                 $record->metadata
             );
         }
@@ -64,7 +65,7 @@ class InMemoryPersistence implements Persistence
 
     /**
      * @param CommitId $commitId
-     * @param Contract $streamId
+     * @param StreamId $streamId
      * @param Contract $aggregateType
      * @param string $aggregateId
      * @param int $expectedAggregateVersion

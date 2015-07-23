@@ -21,4 +21,15 @@ class SimplePhpFqcnContractResolver implements ContractResolver
 
         return new Contract(str_replace('\\', '.', $className), $className);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function resolveFromObject($object = null)
+    {
+        if (is_null($object)) {
+            return null;
+        }
+        return $this->resolveFromClassName(get_class($object));
+    }
 }
