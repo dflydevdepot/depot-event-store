@@ -49,6 +49,8 @@ class PublicMethodsChangeReader implements ChangeReader
         $this->readEventMethodName = $readEventMethodName;
         $this->readMetadataMethodName = $readMetadataMethodName;
         $this->supportedObjectType = $supportedObjectType;
+        $this->canReadEventIdMethodName = $canReadEventIdMethodName;
+        $this->readEventIdMethodName = $readEventIdMethodName;
     }
 
     /**
