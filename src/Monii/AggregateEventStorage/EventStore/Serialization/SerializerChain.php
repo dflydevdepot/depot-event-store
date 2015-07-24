@@ -7,7 +7,7 @@ use Monii\AggregateEventStorage\Aggregate\Error\SerializationNotPossible;
 class SerializerChain implements Serializer
 {
     /**
-     * @var array
+     * @var Serializer[]
      */
     private $serializers;
 
@@ -22,7 +22,6 @@ class SerializerChain implements Serializer
      */
     public function canSerialize($type, $object)
     {
-        /** @var Serializer $serializer */
         foreach ($this->serializers as $serializer) {
             if ($serializer->canSerialize($type, $object)) {
                 return true;
@@ -36,7 +35,6 @@ class SerializerChain implements Serializer
      */
     public function serialize($type, $object)
     {
-        /** @var Serializer $serializer */
         foreach ($this->serializers as $serializer) {
             if ($serializer->canSerialize($type, $object)) {
                 return $serializer->serialize($type, $object);
@@ -49,7 +47,6 @@ class SerializerChain implements Serializer
      */
     public function canDeserialize($type, array $data)
     {
-        /** @var Serializer $serializer */
         foreach ($this->serializers as $serializer) {
             if ($serializer->canDeserialize($type, $data)) {
                 return true;
@@ -63,7 +60,6 @@ class SerializerChain implements Serializer
      */
     public function deserialize($type, array $data)
     {
-        /** @var Serializer $serializer */
         foreach ($this->serializers as $serializer) {
             if ($serializer->canDeserialize($type, $data)) {
                 return $serializer->deserialize($type, $data);
