@@ -126,7 +126,10 @@ class UnitOfWork
 
         $eventEnvelopes = [];
         foreach ($changes as $change) {
-            $eventId = $this->eventIdGenerator->generateEventId();
+            $eventId = $this->aggregateChangeManipulator->canReadEventId($change)
+                ? $this->aggregateChangeManipulator->readEventId($change)
+                : $this->eventIdGenerator->generateEventId()
+            ;
             $event = $this->aggregateChangeManipulator->readEvent($change);
             $metadata = $this->aggregateChangeManipulator->readMetadata($change);
 

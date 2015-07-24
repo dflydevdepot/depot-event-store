@@ -17,9 +17,9 @@ abstract class EventSourcedAggregate implements AggregateEventStorage
     /**
      * @param object $event
      */
-    protected function recordEvent($event)
+    protected function recordEvent($eventId, $event)
     {
-        $this->recordedEvents[] = BankingEventEnvelope::create($event);
+        $this->recordedEvents[] = BankingEventEnvelope::create($eventId, $event);
         $this->handle($event);
     }
 

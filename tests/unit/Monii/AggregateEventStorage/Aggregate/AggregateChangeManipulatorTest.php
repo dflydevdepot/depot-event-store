@@ -16,10 +16,10 @@ class AggregateChangeManipulatorTest extends TestCase
 {
     protected function getAccountFixture()
     {
-        $account = Account::open('fixture-account-000', 25);
-        $account->increaseBalance(3);
-        $account->decreaseBalance(2);
-        $account->increaseBalance(5);
+        $account = Account::open(0,'fixture-account-000', 25);
+        $account->increaseBalance(1,3);
+        $account->decreaseBalance(2,2);
+        $account->increaseBalance(3,5);
 
         return $account;
     }
@@ -27,10 +27,10 @@ class AggregateChangeManipulatorTest extends TestCase
     protected function getAccountFixtureBankingEventEnvelopes()
     {
         return [
-            BankingEventEnvelope::create(new AccountWasOpened('fixture-account-000', 25),'metaData'),
-            BankingEventEnvelope::create(new AccountBalanceIncreased('fixture-account-000', 3)),
-            BankingEventEnvelope::create(new AccountBalanceDecreased('fixture-account-000', 2)),
-            BankingEventEnvelope::create(new AccountBalanceIncreased('fixture-account-000', 5)),
+            BankingEventEnvelope::create(0, new AccountWasOpened('fixture-account-000', 25),'metaData'),
+            BankingEventEnvelope::create(1, new AccountBalanceIncreased('fixture-account-000', 3)),
+            BankingEventEnvelope::create(2, new AccountBalanceDecreased('fixture-account-000', 2)),
+            BankingEventEnvelope::create(3, new AccountBalanceIncreased('fixture-account-000', 5)),
         ];
     }
 
@@ -75,8 +75,9 @@ class AggregateChangeManipulatorTest extends TestCase
     public function testWriteChange()
     {
         $event = new AccountWasOpened('fixture-account-000', 50);
-        $eventEnvelope = BankingEventEnvelope::create($event);
-        $change = $this->getAggregateChangeManipulator()->writeChange($event);
+        $eventId = 0;
+        $eventEnvelope = BankingEventEnvelope::create(0, new AccountWasOpened('fixture-account-000', 50));
+        $change = $this->getAggregateChangeManipulator()->writeChange($eventId, $event);
 
         $this->assertEquals($eventEnvelope, $change);
     }
