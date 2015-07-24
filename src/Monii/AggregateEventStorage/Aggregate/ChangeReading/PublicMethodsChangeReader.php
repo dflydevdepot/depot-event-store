@@ -23,12 +23,28 @@ class PublicMethodsChangeReader implements ChangeReader
     private $supportedObjectType;
 
     /**
-     * @param string $extractChangesMethod popRecordedChanges
+     * @var string
+     */
+    private $canReadEventIdMethodName;
+
+    /**
+     * @var string
+     */
+    private $readEventIdMethodName;
+
+    /**
+     * @param string $readEventMethodName
+     * @param string $readMetadataMethodName
+     * @param $supportedObjectType
+     * @param string $canReadEventIdMethodName
+     * @param string $readEventIdMethodName
      */
     public function __construct(
         $readEventMethodName = 'getAggregateEvent',
         $readMetadataMethodName = 'getAggregateMetadata',
-        $supportedObjectType = AggregateChangeReader::class
+        $supportedObjectType = AggregateChangeReader::class,
+        $canReadEventIdMethodName = 'getCanReadAggregateEventId',
+        $readEventIdMethodName = 'getAggregateEventId'
     ) {
         $this->readEventMethodName = $readEventMethodName;
         $this->readMetadataMethodName = $readMetadataMethodName;
@@ -53,6 +69,26 @@ class PublicMethodsChangeReader implements ChangeReader
         $this->assertObjectIsSupported($change);
 
         return call_user_func([$change, $this->readMetadataMethodName]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canReadEventId($change)
+    {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->canReadEventIdMethodName]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readEventId($change)
+    {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->readEventIdMethodName]);
     }
 
     private function assertObjectIsSupported($object)

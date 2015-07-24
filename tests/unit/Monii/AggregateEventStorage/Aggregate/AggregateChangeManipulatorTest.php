@@ -75,8 +75,9 @@ class AggregateChangeManipulatorTest extends TestCase
     public function testWriteChange()
     {
         $event = new AccountWasOpened('fixture-account-000', 50);
+        $eventId = 0;
         $eventEnvelope = BankingEventEnvelope::create($event);
-        $change = $this->getAggregateChangeManipulator()->writeChange($event);
+        $change = $this->getAggregateChangeManipulator()->writeChange($eventId, $event);
 
         $this->assertEquals($eventEnvelope, $change);
     }

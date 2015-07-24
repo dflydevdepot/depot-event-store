@@ -41,5 +41,20 @@ class BankingEventEnvelope implements AggregateChangeReader
         return $this->metadata;
     }
 
+    /**
+     * @return object
+     */
+    public function getCanReadAggregateEventId()
+    {
+        return $this->event;
+    }
+
+    /**
+     * @return object
+     */
+    public function getAggregateEventId()
+    {
+        return $this->metadata;
+    }
 
 }

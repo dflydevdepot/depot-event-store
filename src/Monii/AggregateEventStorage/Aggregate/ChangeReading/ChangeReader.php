@@ -17,4 +17,18 @@ interface ChangeReader
      * @return object|null
      */
     public function readMetadata($change);
+
+    /**
+     * @param object $change
+     *
+     * @return bool
+     */
+    public function canReadEventId($change);
+
+    /**
+     * @param object $change
+     *
+     * @return string|null
+     */
+    public function readEventId($change);
 }
