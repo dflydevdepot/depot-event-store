@@ -10,7 +10,7 @@ class SerializerChain implements Serializer
     private $serializers;
 
     public function __construct(
-        $serializers = null
+        $serializers = array()
     ){
         $this->serializers = $serializers;
     }
@@ -48,7 +48,7 @@ class SerializerChain implements Serializer
 
     public function  pushSerializer($serializer)
     {
-        $serializers[] = $serializer;
+        $this->serializers[] = $serializer;
     }
 
     public function unshiftSerializer($serializer)

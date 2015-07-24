@@ -50,7 +50,7 @@ class UnitOfWork
 
     public function __construct(
         EventStore $eventStore,
-        Contract $stream,
+        StreamId $streamId,
         AggregateManipulatorTest $aggregateManipulator,
         AggregateChangeManipulator $aggregateChangeManipulator,
         ContractResolver $eventContractResolver,
@@ -58,7 +58,7 @@ class UnitOfWork
         EventIdGenerator $eventIdGenerator = null
     ) {
         $this->eventStore = $eventStore;
-        $this->stream = $stream;
+        $this->streamId = $streamId;
         $this->aggregateManipulator = $aggregateManipulator;
         $this->aggregateChangeManipulator = $aggregateChangeManipulator;
         $this->eventContractResolver = $eventContractResolver;
