@@ -92,8 +92,8 @@ class InMemoryPersistence implements Persistence
             $record->aggregateVersion = ++$aggregateVersion;
             $record->eventType = $eventEnvelope->getEventType();
             $record->eventId = $eventEnvelope->getEventId();
-            $record->event = $this->eventSerializer->serialize($eventEnvelope->getEvent());
-            $record->metadata = $this->metadataSerializer->serialize($eventEnvelope->getMetadata());
+            $record->event = $this->eventSerializer->serialize($eventEnvelope->getEventType(), $eventEnvelope->getEvent());
+            $record->metadata = $this->metadataSerializer->serialize( $eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata());
         }
     }
 }
