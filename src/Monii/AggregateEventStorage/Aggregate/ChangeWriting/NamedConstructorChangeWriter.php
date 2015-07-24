@@ -33,7 +33,7 @@ class NamedConstructorChangeWriter implements ChangeWriter
 
         $staticMethodCall = $this->getStaticMethodCall();
 
-        $object = call_user_func($staticMethodCall, $event, $metadata);
+        $object = call_user_func($staticMethodCall, $eventId, $event, $metadata);
 
         return $object;
     }
