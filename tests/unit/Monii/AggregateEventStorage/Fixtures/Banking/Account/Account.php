@@ -16,22 +16,22 @@ class Account extends EventSourcedAggregate
      */
     private $balance = 0;
 
-    public static function open($accountId, $startingBalance = 0)
+    public static function open($eventId, $accountId, $startingBalance = 0)
     {
         $account = new static();
-        $account->recordEvent(new AccountWasOpened($accountId, $startingBalance));
+        $account->recordEvent($eventId, new AccountWasOpened($accountId, $startingBalance));
 
         return $account;
     }
 
-    public function increaseBalance($amount)
+    public function increaseBalance($eventId, $amount)
     {
-        $this->recordEvent(new AccountBalanceIncreased($this->accountId, $amount));
+        $this->recordEvent($eventId, new AccountBalanceIncreased($this->accountId, $amount));
     }
 
-    public function decreaseBalance($amount)
+    public function decreaseBalance($eventId, $amount)
     {
-        $this->recordEvent(new AccountBalanceDecreased($this->accountId, $amount));
+        $this->recordEvent($eventId, new AccountBalanceDecreased($this->accountId, $amount));
     }
 
     protected function applyAccountWasOpened(AccountWasOpened $event)

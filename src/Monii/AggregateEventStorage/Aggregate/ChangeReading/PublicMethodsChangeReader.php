@@ -20,11 +20,6 @@ class PublicMethodsChangeReader implements ChangeReader
     /**
      * @var string
      */
-    private $supportedObjectType;
-
-    /**
-     * @var string
-     */
     private $canReadEventIdMethodName;
 
     /**
@@ -33,24 +28,29 @@ class PublicMethodsChangeReader implements ChangeReader
     private $readEventIdMethodName;
 
     /**
+     * @var string
+     */
+    private $supportedObjectType;
+
+    /**
      * @param string $readEventMethodName
      * @param string $readMetadataMethodName
-     * @param $supportedObjectType
      * @param string $canReadEventIdMethodName
      * @param string $readEventIdMethodName
+     * @param $supportedObjectType
      */
     public function __construct(
         $readEventMethodName = 'getAggregateEvent',
         $readMetadataMethodName = 'getAggregateMetadata',
-        $supportedObjectType = AggregateChangeReader::class,
         $canReadEventIdMethodName = 'getCanReadAggregateEventId',
-        $readEventIdMethodName = 'getAggregateEventId'
+        $readEventIdMethodName = 'getAggregateEventId',
+        $supportedObjectType = AggregateChangeReader::class
     ) {
         $this->readEventMethodName = $readEventMethodName;
         $this->readMetadataMethodName = $readMetadataMethodName;
-        $this->supportedObjectType = $supportedObjectType;
         $this->canReadEventIdMethodName = $canReadEventIdMethodName;
         $this->readEventIdMethodName = $readEventIdMethodName;
+        $this->supportedObjectType = $supportedObjectType;
     }
 
     /**

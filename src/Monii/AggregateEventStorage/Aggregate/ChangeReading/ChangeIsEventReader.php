@@ -17,14 +17,13 @@ class ChangeIsEventReader implements ChangeReader
 
     public function canReadEventId($change) {
 
-        return $change;
+        return false;
 
     }
 
     public function readEventId($change) {
 
-        return $change;
+        return null;
 
     }
-
 }
