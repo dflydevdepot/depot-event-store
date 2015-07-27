@@ -6,6 +6,7 @@ use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
 use Monii\AggregateEventStorage\Contract\SimplePhpFqcnContractResolver;
+use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class EventStreamTest extends TestCase
@@ -87,6 +88,60 @@ class EventStreamTest extends TestCase
 
         $this->assertEquals($eventStream->all(), [
             $existingEventEnvelope,
+            $appendedEventEnvelope
+        ]);
+    }
+
+    public function testCommittingEventStream()
+    {
+        $this->setUpContractResolver();
+
+        $contract = $this->contractResolver->resolveFromClassName(AccountWasOpened::class);
+
+        $persistence = $this->getMockBuilder(Persistence::class)
+            ->getMock();
+
+        $persistence
+            ->expects($this->never())
+            ->method('fetch');
+
+        $eventStream = EventStream::create($persistence, $contract, 123);
+
+        $appendedEventEnvelope = $this->createEventEnvelope(
+            123,
+            new AccountWasOpened('fixture-account-000', 25)
+        );
+
+        // Append to EventStream
+        $eventStream->append($appendedEventEnvelope);
+
+        $this->assertEquals($eventStream->all(), [
+            $appendedEventEnvelope
+        ]);
+
+        // Commit EventStream - First Time
+        $commitId = new CommitId();
+
+        $eventStream->commit($commitId);
+
+        $this->assertEquals($eventStream->all(), [
+            $appendedEventEnvelope
+        ]);
+
+        $eventStream->append($appendedEventEnvelope);
+
+        $this->assertEquals($eventStream->all(), [
+            $appendedEventEnvelope,
+            $appendedEventEnvelope
+        ]);
+
+        // Commit EventStream - Second Time
+        $commitId = new CommitId();
+
+        $eventStream->commit($commitId);
+
+        $this->assertEquals($eventStream->all(), [
+            $appendedEventEnvelope,
             $appendedEventEnvelope
         ]);
     }
