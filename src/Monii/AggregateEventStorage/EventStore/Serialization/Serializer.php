@@ -18,7 +18,7 @@ interface Serializer
      * @param Contract $type
      * @param object $object
      *
-     * @return object
+     * @return array
      */
     public function serialize(Contract $type, $object);
 
