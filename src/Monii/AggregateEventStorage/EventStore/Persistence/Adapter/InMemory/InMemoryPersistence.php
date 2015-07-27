@@ -6,7 +6,6 @@ use Monii\AggregateEventStorage\Contract\Contract;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
 use Monii\AggregateEventStorage\EventStore\Serialization\Serializer;
-use Monii\AggregateEventStorage\EventStore\StreamIdentity\StreamId;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
 class InMemoryPersistence implements Persistence
@@ -34,15 +33,11 @@ class InMemoryPersistence implements Persistence
         $this->metadataSerializer = $metadataSerializer;
     }
 
-    public function fetch(StreamId $streamId, Contract $aggregateType = null, $aggregateId = null)
+    public function fetch(Contract $aggregateType = null, $aggregateId = null)
     {
         $eventEnvelopes = [];
 
         foreach ($this->records as $record) {
-            if ($streamId !== $record->streamId) {
-                continue;
-            }
-
             if (!is_null($aggregateType) && $aggregateType != $record->aggregateType) {
                 continue;
             }
@@ -65,7 +60,6 @@ class InMemoryPersistence implements Persistence
 
     /**
      * @param CommitId $commitId
-     * @param StreamId $streamId
      * @param Contract $aggregateType
      * @param string $aggregateId
      * @param int $expectedAggregateVersion
@@ -73,7 +67,6 @@ class InMemoryPersistence implements Persistence
      */
     public function commit(
         CommitId $commitId,
-        StreamId $streamId,
         Contract $aggregateType,
         $aggregateId,
         $expectedAggregateVersion,
@@ -86,7 +79,6 @@ class InMemoryPersistence implements Persistence
 
             $record->commitId = $commitId;
             $record->utcComittedTime = new \DateTimeImmutable('now');
-            $record->streamId = $streamId;
             $record->aggregateType = $aggregateType;
             $record->aggregateId = $aggregateId;
             $record->aggregateVersion = ++$aggregateVersion;
