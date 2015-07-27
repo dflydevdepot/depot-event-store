@@ -71,38 +71,6 @@ class EventStream
     }
 
     /**
-     * @param Persistence $persistence
-     * @param Contract $aggregateType
-     *
-     * @return EventStream
-     */
-    public static function openForAggregateType(Persistence $persistence, Contract $aggregateType)
-    {
-        $instance = new self($persistence, $aggregateType);
-        $instance->committedEventEnvelopes = $persistence->fetch($aggregateType);
-
-        return $instance;
-    }
-
-    /**
-     * @param Persistence $persistence
-     * @param Contract $aggregateType
-     * @param string $aggregateId
-     *
-     * @return EventStream
-     */
-    public static function openForAggregateId(
-        Persistence $persistence,
-        Contract $aggregateType,
-        $aggregateId
-    ) {
-        $instance = new self($persistence, $aggregateType, $aggregateId);
-        $instance->committedEventEnvelopes = $persistence->fetch($aggregateType, $aggregateId);
-
-        return $instance;
-    }
-
-    /**
      * @return EventEnvelope[]
      */
     public function all()

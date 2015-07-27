@@ -22,13 +22,8 @@ class EventStore
         return EventStream::create($this->persistence, $aggregateType, $aggregateId);
     }
 
-    public function openAggregateStream(Contract $aggregateType)
-    {
-        return EventStream::openForAggregateType($this->persistence, $aggregateType);
-    }
-
     public function openAggregateInstanceStream(Contract $aggregateType, $aggregateId)
     {
-        return EventStream::openForAggregateId($this->persistence, $aggregateType, $aggregateId);
+        return EventStream::open($this->persistence, $aggregateType, $aggregateId);
     }
 }
