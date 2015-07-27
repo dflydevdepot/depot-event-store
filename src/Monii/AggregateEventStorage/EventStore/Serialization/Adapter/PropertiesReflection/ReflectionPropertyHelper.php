@@ -20,7 +20,7 @@ class ReflectionPropertyHelper
     private $types;
 
     /**
-     * @var boolean|null
+     * @var boolean|string
      */
     private $isObject = false;
 
