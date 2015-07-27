@@ -3,7 +3,6 @@
 namespace Monii\AggregateEventStorage\EventStore\Persistence\Adapter\InMemory;
 
 use Monii\AggregateEventStorage\Contract\Contract;
-use Monii\AggregateEventStorage\EventStore\StreamIdentity\StreamId;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
 class InMemoryPersistenceRecord
@@ -17,11 +16,6 @@ class InMemoryPersistenceRecord
      * @var \DateTimeImmutable
      */
     public $utcComittedTime;
-
-    /**
-     * @var StreamId
-     */
-    public $streamId;
 
     /**
      * @var Contract

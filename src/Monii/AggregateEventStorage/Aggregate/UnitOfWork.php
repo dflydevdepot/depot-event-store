@@ -8,7 +8,6 @@ use Monii\AggregateEventStorage\Contract\ContractResolver;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\EventIdentity\EventIdGenerator;
 use Monii\AggregateEventStorage\EventStore\EventStore;
-use Monii\AggregateEventStorage\EventStore\StreamIdentity\StreamId;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
 class UnitOfWork
@@ -17,11 +16,6 @@ class UnitOfWork
      * @var EventStore
      */
     private $eventStore;
-
-    /**
-     * @var StreamId
-     */
-    private $streamId;
 
     /**
      * @var AggregateManipulator
@@ -50,7 +44,6 @@ class UnitOfWork
 
     public function __construct(
         EventStore $eventStore,
-        StreamId $streamId,
         AggregateManipulatorTest $aggregateManipulator,
         AggregateChangeManipulator $aggregateChangeManipulator,
         ContractResolver $eventContractResolver,
@@ -58,7 +51,6 @@ class UnitOfWork
         EventIdGenerator $eventIdGenerator = null
     ) {
         $this->eventStore = $eventStore;
-        $this->streamId = $streamId;
         $this->aggregateManipulator = $aggregateManipulator;
         $this->aggregateChangeManipulator = $aggregateChangeManipulator;
         $this->eventContractResolver = $eventContractResolver;
@@ -142,7 +134,7 @@ class UnitOfWork
             );
         }
 
-        $eventStream = $this->eventStore->createAggregateStream($this->streamId, $aggregateType, $aggregateId);
+        $eventStream = $this->eventStore->createAggregateStream($aggregateType, $aggregateId);
         $eventStream->appendAll($eventEnvelopes);
         $eventStream->commit($commitId);
 
@@ -214,7 +206,6 @@ class UnitOfWork
     private function findPersistedAggregate(Contract $aggregateType, $aggregateId)
     {
         $eventStream = $this->eventStore->openAggregateInstanceStream(
-            $this->streamId,
             $aggregateType,
             $aggregateId
         );

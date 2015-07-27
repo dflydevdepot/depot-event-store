@@ -4,7 +4,6 @@ namespace Monii\AggregateEventStorage\EventStore;
 
 use Monii\AggregateEventStorage\Contract\Contract;
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
-use Monii\AggregateEventStorage\EventStore\StreamIdentity\StreamId;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
 class EventStream
@@ -13,11 +12,6 @@ class EventStream
      * @var Persistence
      */
     private $persistence;
-
-    /**
-     * @var StreamId
-     */
-    private $streamId;
 
     /**
      * @var Contract
@@ -41,61 +35,57 @@ class EventStream
 
     /**
      * @param Persistence $persistence
-     * @param StreamId $streamId
      * @param Contract $aggregateType
      * @param string $aggregateId
      */
     private function __construct(
         Persistence $persistence,
-        StreamId $streamId,
         Contract $aggregateType = null,
         $aggregateId = null
     ) {
         $this->persistence = $persistence;
-        $this->streamId = $streamId;
         $this->aggregateType = $aggregateType;
         $this->aggregateId = $aggregateId;
     }
 
-    public static function create(Persistence $persistence, StreamId $streamId)
+    public static function create(Persistence $persistence, Contract $aggregateType, $aggregateId)
     {
-        $instance = new self($persistence, $streamId);
+        $instance = new self($persistence, $aggregateType, $aggregateId);
 
         return $instance;
     }
 
     /**
      * @param Persistence $persistence
-     * @param StreamId $streamId
+     * @param Contract $aggregateType
+     * @param $aggregateId
      *
      * @return EventStream
      */
-    public static function open(Persistence $persistence, StreamId $streamId)
+    public static function open(Persistence $persistence, Contract $aggregateType, $aggregateId)
     {
-        $instance = new self($persistence, $streamId);
-        $instance->committedEventEnvelopes = $persistence->fetch($streamId);
+        $instance = new self($persistence, $aggregateType, $aggregateId);
+        $instance->committedEventEnvelopes = $persistence->fetch($aggregateType, $aggregateId);
 
         return $instance;
     }
 
     /**
      * @param Persistence $persistence
-     * @param StreamId $streamId
      * @param Contract $aggregateType
      *
      * @return EventStream
      */
-    public static function openForAggregateType(Persistence $persistence, StreamId $streamId, Contract $aggregateType)
+    public static function openForAggregateType(Persistence $persistence, Contract $aggregateType)
     {
-        $instance = new self($persistence, $streamId);
-        $instance->committedEventEnvelopes = $persistence->fetch($streamId, $aggregateType);
+        $instance = new self($persistence, $aggregateType);
+        $instance->committedEventEnvelopes = $persistence->fetch($aggregateType);
 
         return $instance;
     }
 
     /**
      * @param Persistence $persistence
-     * @param StreamId $streamId
      * @param Contract $aggregateType
      * @param string $aggregateId
      *
@@ -103,12 +93,11 @@ class EventStream
      */
     public static function openForAggregateId(
         Persistence $persistence,
-        StreamId $streamId,
         Contract $aggregateType,
         $aggregateId
     ) {
-        $instance = new self($persistence, $streamId);
-        $instance->committedEventEnvelopes = $persistence->fetch($streamId, $aggregateType, $aggregateId);
+        $instance = new self($persistence, $aggregateType, $aggregateId);
+        $instance->committedEventEnvelopes = $persistence->fetch($aggregateType, $aggregateId);
 
         return $instance;
     }
@@ -150,7 +139,6 @@ class EventStream
     {
         $this->persistence->commit(
             $commitId,
-            $this->streamId,
             $this->aggregateType,
             $this->aggregateId,
             count($this->committedEventEnvelopes),

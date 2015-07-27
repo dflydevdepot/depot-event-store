@@ -4,7 +4,6 @@ namespace Monii\AggregateEventStorage\EventStore;
 
 use Monii\AggregateEventStorage\Contract\Contract;
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
-use Monii\AggregateEventStorage\EventStore\StreamIdentity\StreamId;
 
 class EventStore
 {
@@ -18,23 +17,18 @@ class EventStore
         $this->persistence = $persistence;
     }
 
-    public function createAggregateStream(StreamId $streamId, Contract $aggregateType, $aggregateId)
+    public function createAggregateStream(Contract $aggregateType, $aggregateId)
     {
-        return EventStream::create($this->persistence, $streamId, $aggregateType, $aggregateId);
+        return EventStream::create($this->persistence, $aggregateType, $aggregateId);
     }
 
-    public function openStream(StreamId $streamId)
+    public function openAggregateStream(Contract $aggregateType)
     {
-        return EventStream::open($this->persistence, $streamId);
+        return EventStream::openForAggregateType($this->persistence, $aggregateType);
     }
 
-    public function openAggregateStream(StreamId $streamId, Contract $aggregateType)
+    public function openAggregateInstanceStream(Contract $aggregateType, $aggregateId)
     {
-        return EventStream::openForAggregateType($this->persistence, $streamId, $aggregateType);
-    }
-
-    public function openAggregateInstanceStream(StreamId $streamId, Contract $aggregateType, $aggregateId)
-    {
-        return EventStream::openForAggregateId($this->persistence, $streamId, $aggregateType, $aggregateId);
+        return EventStream::openForAggregateId($this->persistence, $aggregateType, $aggregateId);
     }
 }
