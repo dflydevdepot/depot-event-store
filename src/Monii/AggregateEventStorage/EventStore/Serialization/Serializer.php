@@ -12,7 +12,7 @@ interface Serializer
      *
      * @return bool
      */
-    public function canSerialize($type, $object);
+    public function canSerialize(Contract $type, $object);
 
     /**
      * @param Contract $type
@@ -20,7 +20,7 @@ interface Serializer
      *
      * @return object
      */
-    public function serialize($type, $object);
+    public function serialize(Contract $type, $object);
 
     /**
      * @param Contract $type
@@ -28,7 +28,7 @@ interface Serializer
      *
      * @return bool
      */
-    public function canDeserialize($type, array $data);
+    public function canDeserialize(Contract $type, array $data);
 
     /**
      * @param Contract $type
@@ -36,5 +36,5 @@ interface Serializer
      *
      * @return object
      */
-    public function deserialize($type, array $data);
+    public function deserialize(Contract $type, array $data);
 }

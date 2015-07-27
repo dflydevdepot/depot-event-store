@@ -3,6 +3,7 @@
 namespace Monii\AggregateEventStorage\EventStore\Serialization;
 
 use Monii\AggregateEventStorage\Aggregate\Error\SerializationNotPossible;
+use Monii\AggregateEventStorage\Contract\Contract;
 
 class SerializerChain implements Serializer
 {
@@ -20,7 +21,7 @@ class SerializerChain implements Serializer
     /**
      * (@inheritdoc)
      */
-    public function canSerialize($type, $object)
+    public function canSerialize(Contract $type, $object)
     {
         foreach ($this->serializers as $serializer) {
             if ($serializer->canSerialize($type, $object)) {
@@ -33,7 +34,7 @@ class SerializerChain implements Serializer
     /**
      * (@inheritdoc)
      */
-    public function serialize($type, $object)
+    public function serialize(Contract $type, $object)
     {
         foreach ($this->serializers as $serializer) {
             if ($serializer->canSerialize($type, $object)) {
@@ -45,7 +46,7 @@ class SerializerChain implements Serializer
     /**
      * (@inheritdoc)
      */
-    public function canDeserialize($type, array $data)
+    public function canDeserialize(Contract $type, array $data)
     {
         foreach ($this->serializers as $serializer) {
             if ($serializer->canDeserialize($type, $data)) {
@@ -58,7 +59,7 @@ class SerializerChain implements Serializer
     /**
      * (@inheritdoc)
      */
-    public function deserialize($type, array $data)
+    public function deserialize(Contract $type, array $data)
     {
         foreach ($this->serializers as $serializer) {
             if ($serializer->canDeserialize($type, $data)) {
