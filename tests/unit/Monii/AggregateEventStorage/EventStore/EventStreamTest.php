@@ -2,165 +2,92 @@
 
 use Monii\AggregateEventStorage\EventStore\EventStream;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
+use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
 use Monii\AggregateEventStorage\Contract\SimplePhpFqcnContractResolver;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class EventStreamTest extends TestCase
 {
-    public function testCreatingEventStream()
+    /**
+     * @var ContractResolver
+     */
+    private $contractResolver;
+
+    private function setUpContractResolver()
     {
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
-
-        $eventStream = EventStream::create($persistence, $aggregateType, $aggregateId);
-
-        // Check values in instance of EventStream match what they were passed in as
-        $this->assertEquals($persistence, $eventStream->persistence);
-        $this->assertEquals($aggregateType, $eventStream->aggregateType);
-        $this->assertEquals($aggregateId, $eventStream->aggregateId);*/
+        $this->contractResolver = new SimplePhpFqcnContractResolver();
     }
 
-    public function testOpeningEventStream()
+    private function createEventEnvelope($eventId, $event)
     {
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
-
-        $eventStream = EventStream::open($persistence, $aggregateType, $aggregateId);
-
-        // Check values in instance of EventStream match what they were passed in as
-        $this->assertEquals($persistence, $eventStream->persistence);
-        $this->assertEquals($aggregateType, $eventStream->aggregateType);
-        $this->assertEquals($aggregateId, $eventStream->aggregateId);*/
+        return new EventEnvelope(
+            $this->contractResolver->resolveFromObject($event),
+            $eventId,
+            $event
+        );
     }
 
-    public function testAppendingEventEnvelopeEventStream()
+    public function testAppendingEventEnvelopeToCreatedEventStream()
     {
-        $contractResolver = new SimplePhpFqcnContractResolver();
-        $contract = $contractResolver->resolveFromClassName(AccountWasOpened::class);
+        $this->setUpContractResolver();
 
-        $eventType = $contract;
-        $eventId = 123;
-        $event = new AccountWasOpened('fixture-account-000', 25);
+        $contract = $this->contractResolver->resolveFromClassName(AccountWasOpened::class);
 
-        $eventEnvelope = new EventEnvelope($eventType, $eventId, $event);
+        $persistence = $this->getMockBuilder(Persistence::class)
+            ->getMock();
 
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
+        $persistence
+            ->expects($this->never())
+            ->method('fetch');
 
-        $eventStream = EventStream::open($persistence, $aggregateType, $aggregateId);
+        $eventStream = EventStream::create($persistence, $contract, 123);
 
-        $eventStream->append($eventEnvelope);
+        $appendedEventEnvelope = $this->createEventEnvelope(
+            123,
+            new AccountWasOpened('fixture-account-000', 25)
+        );
 
-        $this->assertEquals($eventStream->pendingEventEnvelopes, array($eventEnvelope));*/
+        $eventStream->append($appendedEventEnvelope);
+
+        $this->assertEquals($eventStream->all(), [
+            $appendedEventEnvelope
+        ]);
     }
 
-    public function testAppendingAllEventEnvelopesEventStream()
+    public function testAppendingEventEnvelopeToOpenedEventStream()
     {
-        $contractResolver = new SimplePhpFqcnContractResolver();
-        $contract = $contractResolver->resolveFromClassName(AccountWasOpened::class);
+        $this->setUpContractResolver();
 
-        $eventType = $contract;
-        $eventId = 123;
-        $event = new AccountWasOpened('fixture-account-000', 25);
+        $contract = $this->contractResolver->resolveFromClassName(AccountWasOpened::class);
 
-        $eventEnvelope = new EventEnvelope($eventType, $eventId, $event);
+        $existingEventEnvelope = $this->createEventEnvelope(
+            123,
+            new AccountWasOpened('fixture-account-000', 25)
+        );
 
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
+        $persistence = $this->getMockBuilder(Persistence::class)
+            ->getMock();
 
-        $eventStream = EventStream::open($persistence, $aggregateType, $aggregateId);
+        $persistence
+            ->expects($this->once())
+            ->method('fetch')
+            ->with($this->equalTo($contract), $this->equalTo(123))
+            ->will($this->returnValue([$existingEventEnvelope]));
 
-        $eventStream->appendAll(array($eventEnvelope, $eventEnvelope));
+        $eventStream = EventStream::open($persistence, $contract, 123);
 
-        $this->assertEquals($eventStream->pendingEventEnvelopes, array($eventEnvelope, $eventEnvelope));*/
-    }
+        $appendedEventEnvelope = $this->createEventEnvelope(
+            124,
+            new AccountBalanceIncreased('fixture-account-000', 10)
+        );
 
-    public function testCommittingEventStream()
-    {
-        $contractResolver = new SimplePhpFqcnContractResolver();
-        $contract = $contractResolver->resolveFromClassName(AccountWasOpened::class);
+        $eventStream->append($appendedEventEnvelope);
 
-        $eventType = $contract;
-        $eventId = 123;
-        $event = new AccountWasOpened('fixture-account-000', 25);
-
-        $eventEnvelope = new EventEnvelope($eventType, $eventId, $event);
-
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
-
-        $eventStream = EventStream::open($persistence, $aggregateType, $aggregateId);
-
-        $eventStream->append($eventEnvelope);
-
-        $eventStream->commit($commitId); // Where do I get a commitId from?
-
-        $this->assertEquals($eventStream->committedEventEnvelopes, array($eventEnvelope));
-        $this->assertEquals($eventStream->pendingEventEnvelopes, array());*/
-    }
-
-    public function testCommittingTwiceEventStream()
-    {
-        $contractResolver = new SimplePhpFqcnContractResolver();
-        $contract = $contractResolver->resolveFromClassName(AccountWasOpened::class);
-
-        $eventType = $contract;
-        $eventId = 123;
-        $event = new AccountWasOpened('fixture-account-000', 25);
-
-        $eventEnvelope = new EventEnvelope($eventType, $eventId, $event);
-
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
-
-        $eventStream = EventStream::open($persistence, $aggregateType, $aggregateId);
-
-        $eventStream->append($eventEnvelope);
-
-        $eventStream->commit($commitId); // Where do I get a commitId from?
-
-        $eventStream->commit($commitId); // Where do I get a commitId from?
-
-        $this->assertEquals($eventStream->committedEventEnvelopes, array($eventEnvelope, $eventEnvelope));
-        $this->assertEquals($eventStream->pendingEventEnvelopes, array());*/
-    }
-
-    public function testAppendCommitAppendCommitEventStream()
-    {
-        $contractResolver = new SimplePhpFqcnContractResolver();
-        $contract = $contractResolver->resolveFromClassName(AccountWasOpened::class);
-
-        $eventType = $contract;
-        $eventId = 123;
-        $event = new AccountWasOpened('fixture-account-000', 25);
-
-        $eventEnvelope = new EventEnvelope($eventType, $eventId, $event);
-
-        /*$persistence = ; // where to get $persistence from / How to create persistence?
-        $aggregateType = ;
-        $aggregateId = ;
-
-        $eventStream = EventStream::open($persistence, $aggregateType, $aggregateId);
-
-        $eventStream->append($eventEnvelope);
-
-        $eventStream->commit($commitId); // Where do I get a commitId from?
-
-        $this->assertEquals($eventStream->committedEventEnvelopes, array($eventEnvelope));
-        $this->assertEquals($eventStream->pendingEventEnvelopes, array());
-
-        $eventStream->append($eventEnvelope);
-        
-        $eventStream->commit($commitId); // Where do I get a commitId from?
-
-        $this->assertEquals($eventStream->committedEventEnvelopes, array($eventEnvelope, $eventEnvelope));
-        $this->assertEquals($eventStream->pendingEventEnvelopes, array());*/
+        $this->assertEquals($eventStream->all(), [
+            $existingEventEnvelope,
+            $appendedEventEnvelope
+        ]);
     }
 }
