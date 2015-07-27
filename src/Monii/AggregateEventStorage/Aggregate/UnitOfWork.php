@@ -134,7 +134,7 @@ class UnitOfWork
             );
         }
 
-        $eventStream = $this->eventStore->createAggregateStream($aggregateType, $aggregateId);
+        $eventStream = $this->eventStore->create($aggregateType, $aggregateId);
         $eventStream->appendAll($eventEnvelopes);
         $eventStream->commit($commitId);
 
@@ -205,7 +205,7 @@ class UnitOfWork
      */
     private function findPersistedAggregate(Contract $aggregateType, $aggregateId)
     {
-        $eventStream = $this->eventStore->openAggregateInstanceStream(
+        $eventStream = $this->eventStore->open(
             $aggregateType,
             $aggregateId
         );

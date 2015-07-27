@@ -17,18 +17,13 @@ class EventStore
         $this->persistence = $persistence;
     }
 
-    public function createAggregateStream(Contract $aggregateType, $aggregateId)
+    public function create(Contract $aggregateType, $aggregateId)
     {
         return EventStream::create($this->persistence, $aggregateType, $aggregateId);
     }
 
-    public function openAggregateStream(Contract $aggregateType)
+    public function open(Contract $aggregateType, $aggregateId)
     {
-        return EventStream::openForAggregateType($this->persistence, $aggregateType);
-    }
-
-    public function openAggregateInstanceStream(Contract $aggregateType, $aggregateId)
-    {
-        return EventStream::openForAggregateId($this->persistence, $aggregateType, $aggregateId);
+        return EventStream::open($this->persistence, $aggregateType, $aggregateId);
     }
 }
