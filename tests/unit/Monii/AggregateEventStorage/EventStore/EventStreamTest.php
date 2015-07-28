@@ -102,8 +102,8 @@ class EventStreamTest extends TestCase
             ->getMock();
 
         $persistence
-            ->expects($this->never())
-            ->method('fetch');
+            ->expects($this->exactly(2))
+            ->method('commit');
 
         $eventStream = EventStream::create($persistence, $contract, 123);
 
