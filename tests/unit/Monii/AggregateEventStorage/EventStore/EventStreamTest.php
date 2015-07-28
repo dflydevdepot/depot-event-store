@@ -122,13 +122,10 @@ class EventStreamTest extends TestCase
         $persistence
             ->expects($this->exactly(2))
             ->method('commit')
-            /*->withConsecutive(
+            ->withConsecutive(
                 array($commitIdOne),
                 array($commitIdTwo)
-            )
-            ->will(
-                $this->onConsecutiveCalls()
-            )*/;
+            );
 
         // Append to EventStream
         $eventStream->append($appendedEventEnvelopeOne);
