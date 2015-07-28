@@ -7,11 +7,11 @@ use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangeClea
 use Monii\AggregateEventStorage\Aggregate\Identification\PublicMethodIdentifier;
 use Monii\AggregateEventStorage\Aggregate\Instantiation\NamedConstructorInstantiator;
 use Monii\AggregateEventStorage\Aggregate\Reconstitution\PublicMethodReconstituter;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\Account;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountBalanceDecreased;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountWasOpened;
-use Monii\AggregateRootStorage\Fixtures\Banking\Common\BankingEventEnvelope;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\Account;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceDecreased;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
+use Monii\AggregateEventStorage\Fixtures\Banking\Common\BankingEventEnvelope;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AggregateManipulatorTest extends TestCase

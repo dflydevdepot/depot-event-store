@@ -27,7 +27,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Monii\\AggregateRootStorage\\": "vendor/monii/aggregate-event-storage-testing/src/unit/Monii/AggregateRootStorage"
+            "Monii\\AggregateEventStorage\\": "vendor/monii/aggregate-event-storage-testing/src/unit/Monii/AggregateEventStorage"
         }
     }
 }

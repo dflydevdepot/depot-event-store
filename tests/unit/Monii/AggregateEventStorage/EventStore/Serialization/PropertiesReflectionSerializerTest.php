@@ -1,7 +1,7 @@
 <?php
 
 use Monii\AggregateEventStorage\EventStore\Serialization\PropertiesReflectionSerializer;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountWasOpened;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
 use Monii\AggregateEventStorage\Contract\SimplePhpFqcnContractResolver;
 use PHPUnit_Framework_TestCase as TestCase;
 

@@ -5,11 +5,11 @@ namespace Monii\AggregateEventStorage\Aggregate;
 use Monii\AggregateEventStorage\Aggregate\ChangeReading\PublicMethodsChangeReader;
 use Monii\AggregateEventStorage\Aggregate\ChangeWriting\ChangeIsEventWriter;
 use Monii\AggregateEventStorage\Aggregate\ChangeWriting\NamedConstructorChangeWriter;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\Account;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountBalanceDecreased;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountWasOpened;
-use Monii\AggregateRootStorage\Fixtures\Banking\Common\BankingEventEnvelope;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\Account;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceDecreased;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
+use Monii\AggregateEventStorage\Fixtures\Banking\Common\BankingEventEnvelope;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class AggregateChangeManipulatorTest extends TestCase

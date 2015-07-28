@@ -1,6 +1,6 @@
 <?php
 
-use Monii\AggregateRootStorage\Fixtures\Banking\Account\AccountWasOpened;
+use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountWasOpened;
 use Monii\AggregateEventStorage\Aggregate\ChangeReading\ChangeIsEventReader;
 use PHPUnit_Framework_TestCase as TestCase;
 
