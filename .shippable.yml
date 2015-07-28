@@ -27,9 +27,9 @@ before_install:
 before_script:
   - mkdir -p $CI_REPORTS
   - mkdir -p $COVERAGE_REPORTS
+  - composer config github-oauth.github.com "$COMPOSER_GITHUB_TOKEN"
   - composer self-update
   - composer install
-  - composer config github-oauth.github.com "$COMPOSER_GITHUB_TOKEN"
 
 script:
   - ./vendor/bin/phpunit --log-junit $CI_REPORTS/junit.xml --coverage-xml $COVERAGE_REPORTS --coverage-clover=$COVERAGE_REPORTS/coverage.clover
