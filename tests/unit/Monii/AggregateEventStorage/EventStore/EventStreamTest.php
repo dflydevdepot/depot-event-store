@@ -107,16 +107,16 @@ class EventStreamTest extends TestCase
 
         $eventStream = EventStream::create($persistence, $contract, 123);
 
-        $appendedEventEnvelope = $this->createEventEnvelope(
+        $appendedEventEnvelopeOne = $this->createEventEnvelope(
             123,
             new AccountWasOpened('fixture-account-000', 25)
         );
 
         // Append to EventStream
-        $eventStream->append($appendedEventEnvelope);
+        $eventStream->append($appendedEventEnvelopeOne);
 
         $this->assertEquals($eventStream->all(), [
-            $appendedEventEnvelope
+            $appendedEventEnvelopeOne
         ]);
 
         // Commit EventStream - First Time
@@ -125,14 +125,19 @@ class EventStreamTest extends TestCase
         $eventStream->commit($commitId);
 
         $this->assertEquals($eventStream->all(), [
-            $appendedEventEnvelope
+            $appendedEventEnvelopeOne
         ]);
 
-        $eventStream->append($appendedEventEnvelope);
+        $appendedEventEnvelopeTwo = $this->createEventEnvelope(
+            123,
+            new AccountWasOpened('fixture-account-001', 35)
+        );
+
+        $eventStream->append($appendedEventEnvelopeTwo);
 
         $this->assertEquals($eventStream->all(), [
-            $appendedEventEnvelope,
-            $appendedEventEnvelope
+            $appendedEventEnvelopeOne,
+            $appendedEventEnvelopeTwo
         ]);
 
         // Commit EventStream - Second Time
@@ -141,8 +146,8 @@ class EventStreamTest extends TestCase
         $eventStream->commit($commitId);
 
         $this->assertEquals($eventStream->all(), [
-            $appendedEventEnvelope,
-            $appendedEventEnvelope
+            $appendedEventEnvelopeOne,
+            $appendedEventEnvelopeTwo
         ]);
     }
 }
