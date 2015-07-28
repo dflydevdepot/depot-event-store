@@ -98,19 +98,37 @@ class EventStreamTest extends TestCase
 
         $contract = $this->contractResolver->resolveFromClassName(Account::class);
 
-        $persistence = $this->getMockBuilder(Persistence::class)
-            ->getMock();
-
-        $persistence
-            ->expects($this->exactly(2))
-            ->method('commit');
-
-        $eventStream = EventStream::create($persistence, $contract, 123);
-
         $appendedEventEnvelopeOne = $this->createEventEnvelope(
             123,
             new AccountWasOpened('fixture-account-000', 25)
         );
+
+        $appendedEventEnvelopeTwo = $this->createEventEnvelope(
+            124,
+            new AccountWasOpened('fixture-account-001', 35)
+        );
+
+        // Commit EventStream - First Time
+        $commitIdOne = new CommitId();
+
+        // Commit EventStream - First Time
+        $commitIdTwo = new CommitId();
+
+        $persistence = $this->getMockBuilder(Persistence::class)
+            ->getMock();
+
+        $eventStream = EventStream::create($persistence, $contract, 123);
+
+        $persistence
+            ->expects($this->exactly(2))
+            ->method('commit')
+            /*->withConsecutive(
+                array($commitIdOne),
+                array($commitIdTwo)
+            )
+            ->will(
+                $this->onConsecutiveCalls()
+            )*/;
 
         // Append to EventStream
         $eventStream->append($appendedEventEnvelopeOne);
@@ -119,19 +137,11 @@ class EventStreamTest extends TestCase
             $appendedEventEnvelopeOne
         ]);
 
-        // Commit EventStream - First Time
-        $commitId = new CommitId();
-
-        $eventStream->commit($commitId);
+        $eventStream->commit($commitIdOne);
 
         $this->assertEquals($eventStream->all(), [
             $appendedEventEnvelopeOne
         ]);
-
-        $appendedEventEnvelopeTwo = $this->createEventEnvelope(
-            124,
-            new AccountWasOpened('fixture-account-001', 35)
-        );
 
         $eventStream->append($appendedEventEnvelopeTwo);
 
@@ -140,10 +150,7 @@ class EventStreamTest extends TestCase
             $appendedEventEnvelopeTwo
         ]);
 
-        // Commit EventStream - Second Time
-        $commitId = new CommitId();
-
-        $eventStream->commit($commitId);
+        $eventStream->commit($commitIdTwo);
 
         $this->assertEquals($eventStream->all(), [
             $appendedEventEnvelopeOne,
