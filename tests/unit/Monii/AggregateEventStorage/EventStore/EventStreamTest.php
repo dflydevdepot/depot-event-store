@@ -34,7 +34,7 @@ class EventStreamTest extends TestCase
     {
         $this->setUpContractResolver();
 
-        $contract = $this->contractResolver->resolveFromClassName(AccountWasOpened::class);
+        $contract = $this->contractResolver->resolveFromClassName(Account::class);
 
         $persistence = $this->getMockBuilder(Persistence::class)
             ->getMock();
@@ -61,7 +61,7 @@ class EventStreamTest extends TestCase
     {
         $this->setUpContractResolver();
 
-        $contract = $this->contractResolver->resolveFromClassName(AccountWasOpened::class);
+        $contract = $this->contractResolver->resolveFromClassName(Account::class);
 
         $existingEventEnvelope = $this->createEventEnvelope(
             123,
@@ -96,7 +96,7 @@ class EventStreamTest extends TestCase
     {
         $this->setUpContractResolver();
 
-        $contract = $this->contractResolver->resolveFromClassName(AccountWasOpened::class);
+        $contract = $this->contractResolver->resolveFromClassName(Account::class);
 
         $persistence = $this->getMockBuilder(Persistence::class)
             ->getMock();
