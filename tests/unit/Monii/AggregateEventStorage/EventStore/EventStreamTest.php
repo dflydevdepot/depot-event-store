@@ -129,7 +129,7 @@ class EventStreamTest extends TestCase
         ]);
 
         $appendedEventEnvelopeTwo = $this->createEventEnvelope(
-            123,
+            124,
             new AccountWasOpened('fixture-account-001', 35)
         );
 
