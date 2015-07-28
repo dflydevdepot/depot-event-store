@@ -39,15 +39,27 @@ class ReflectionPropertyHelper
             if (!empty($types)) {
                 foreach ($types as $type) {
                     if (class_exists($type)) {
+
                         // Object
                         $this->types[] = $type;
-                        $this->isObject = $type;
+
+                        $typeReflectionClass = new \ReflectionClass($type);
+                        if (!$typeReflectionClass->isInterface() && !$typeReflectionClass->isAbstract()) {
+                            $this->isObject = $type;
+                        }
+
                     } else {
                         $type = $reflectionClass->getNamespaceName() . '\\' . $type;
                         if (class_exists($type)) {
+
                             // Object
                             $this->types[] = $type;
-                            $this->isObject = $type;
+
+                            $typeReflectionClass = new \ReflectionClass($type);
+                            if (!$typeReflectionClass->isInterface() && !$typeReflectionClass->isAbstract()) {
+                                $this->isObject = $type;
+                            }
+
                         } else {
                             $this->types[] = $type = null;
                         }
