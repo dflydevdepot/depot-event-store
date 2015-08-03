@@ -80,7 +80,7 @@ class InMemoryPersistence implements Persistence
             $record = new InMemoryPersistenceRecord();
 
             $record->commitId = $commitId;
-            $record->utcComittedTime = new \DateTimeImmutable('now');
+            $record->utcCommittedTime = new \DateTimeImmutable('now');
             $record->aggregateType = $aggregateType;
             $record->aggregateId = $aggregateId;
             $record->aggregateVersion = ++$aggregateVersion;
