@@ -15,7 +15,7 @@ class InMemoryPersistenceRecord
     /**
      * @var \DateTimeImmutable
      */
-    public $utcComittedTime;
+    public $utcCommittedTime;
 
     /**
      * @var Contract
