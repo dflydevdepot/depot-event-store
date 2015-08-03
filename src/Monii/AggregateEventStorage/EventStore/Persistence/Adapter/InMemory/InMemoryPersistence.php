@@ -49,9 +49,11 @@ class InMemoryPersistence implements Persistence
             $eventEnvelopes[] = new EventEnvelope(
                 $record->eventType,
                 $record->eventId,
-                $record->event,
+                $this->eventSerializer->deserialize($record->eventType, $record->event),
                 $record->metadataType,
-                $record->metadata
+                $record->metadataType
+                    ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
+                    : null
             );
         }
 
@@ -85,7 +87,13 @@ class InMemoryPersistence implements Persistence
             $record->eventType = $eventEnvelope->getEventType();
             $record->eventId = $eventEnvelope->getEventId();
             $record->event = $this->eventSerializer->serialize($eventEnvelope->getEventType(), $eventEnvelope->getEvent());
-            $record->metadata = $this->metadataSerializer->serialize( $eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata());
+            $record->metadataType = $eventEnvelope->getMetadataType();
+            $record->metadata = $eventEnvelope->getMetadataType()
+                ? $this->metadataSerializer->serialize( $eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
+                : null
+            ;
+
+            $this->records[] = $record;
         }
     }
 }

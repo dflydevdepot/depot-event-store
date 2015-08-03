@@ -43,7 +43,7 @@ class InMemoryPersistenceRecord
     public $eventId;
 
     /**
-     * @var object
+     * @var array
      */
     public $event;
 
@@ -53,7 +53,7 @@ class InMemoryPersistenceRecord
     public $metadataType;
 
     /**
-     * @var object|null
+     * @var array
      */
     public $metadata;
 }
