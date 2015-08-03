@@ -38,11 +38,11 @@ class InMemoryPersistence implements Persistence
         $eventEnvelopes = [];
 
         foreach ($this->records as $record) {
-            if (!is_null($aggregateType) && $aggregateType != $record->aggregateType) {
+            if ($aggregateType != $record->aggregateType) {
                 continue;
             }
 
-            if (!is_null($aggregateId) && $aggregateId != $record->aggregateId) {
+            if ($aggregateId != $record->aggregateId) {
                 continue;
             }
 
