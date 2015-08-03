@@ -44,7 +44,7 @@ class UnitOfWork
 
     public function __construct(
         EventStore $eventStore,
-        AggregateManipulatorTest $aggregateManipulator,
+        AggregateManipulator $aggregateManipulator,
         AggregateChangeManipulator $aggregateChangeManipulator,
         ContractResolver $eventContractResolver,
         ContractResolver $metadataContractResolver,
@@ -93,10 +93,8 @@ class UnitOfWork
         return array_key_exists($aggregateType->getContractName(), $this->trackedAggregates);
     }
 
-    public function commit()
+    public function commit(CommitId $commitId)
     {
-        $commitId = new CommitId();
-
         foreach ($this->trackedAggregates as $trackedAggregateTypes) {
             $aggregateType = $trackedAggregateTypes['contract'];
             foreach ($trackedAggregateTypes['aggregates'] as $aggregate) {
@@ -168,13 +166,13 @@ class UnitOfWork
      */
     private function findTrackedAggregate(Contract $aggregateType, $aggregateId)
     {
-        if (! array_key_exists((string) $aggregateType, $this->trackedAggregates)) {
-            $this->trackedAggregates[(string) $aggregateType] = [];
+        $contractName = $aggregateType->getContractName();
 
+        if (! array_key_exists($contractName, $this->trackedAggregates)) {
             return null;
         }
 
-        foreach ($this->trackedAggregates[(string) $aggregateType] as $trackedAggregate) {
+        foreach ($this->trackedAggregates[$contractName]['aggregates'] as $trackedAggregate) {
             $trackedAggregateId = $this->aggregateManipulator->identify($trackedAggregate);
             if ($trackedAggregateId == $aggregateId) {
                 return $trackedAggregate;
@@ -212,10 +210,15 @@ class UnitOfWork
 
         $events = array_map(function (EventEnvelope $eventEnvelope) {
             return $this->aggregateChangeManipulator->writeChange(
+                $eventEnvelope->getEventId(),
                 $eventEnvelope->getEvent(),
                 $eventEnvelope->getMetadata()
             );
         }, $eventStream->all());
+
+        if (! count($events)) {
+            return null;
+        }
 
         $aggregate = $this->instantiateAggregate($aggregateType);
         $this->reconstituteAggregate($aggregate, $events);
