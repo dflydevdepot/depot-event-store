@@ -51,7 +51,9 @@ class InMemoryPersistence implements Persistence
                 $record->eventId,
                 $this->eventSerializer->deserialize($record->eventType, $record->event),
                 $record->metadataType,
-                $record->metadata
+                $record->metadataType
+                    ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
+                    : null
             );
         }
 
