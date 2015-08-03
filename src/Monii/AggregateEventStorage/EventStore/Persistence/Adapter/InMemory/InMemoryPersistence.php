@@ -33,16 +33,16 @@ class InMemoryPersistence implements Persistence
         $this->metadataSerializer = $metadataSerializer;
     }
 
-    public function fetch(Contract $aggregateType = null, $aggregateId = null)
+    public function fetch(Contract $aggregateType, $aggregateId)
     {
         $eventEnvelopes = [];
 
         foreach ($this->records as $record) {
-            if (!is_null($aggregateType) && $aggregateType != $record->aggregateType) {
+            if ($aggregateType != $record->aggregateType) {
                 continue;
             }
 
-            if (!is_null($aggregateId) && $aggregateId != $record->aggregateId) {
+            if ($aggregateId != $record->aggregateId) {
                 continue;
             }
 
