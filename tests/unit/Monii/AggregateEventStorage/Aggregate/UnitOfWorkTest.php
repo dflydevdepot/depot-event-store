@@ -67,19 +67,52 @@ class UnitOfWorkTest extends TestCase
         $account = Account::open(5, 'fixture-account-201', 25);
         $contract = (new SimplePhpFqcnContractResolver())->resolveFromClassName(Account::class);
 
+        $account->increaseBalance(6006, 100);
+
+        $this->assertcount(2, $account->getAggregateChanges());
+        $this->assertCount(0, $account->getCommittedEvents());
+        $this->assertCount(2, $account->getHandledEvents());
+
         $this->unitOfWork->track($contract, 'fixture-account-201', $account);
+
+        $this->assertcount(2, $account->getAggregateChanges());
+        $this->assertCount(0, $account->getCommittedEvents());
+        $this->assertCount(2, $account->getHandledEvents());
+
+        $account->decreaseBalance(6007, 50);
+
+        $this->assertcount(3, $account->getAggregateChanges());
+        $this->assertCount(0, $account->getCommittedEvents());
+        $this->assertCount(3, $account->getHandledEvents());
+
+        $this->unitOfWork->commit(CommitId::fromString('8126175E-854F-4D9F-A56B-EB3C57C6D8DF'));
     }
 
     /**
      * @expectedException \Monii\AggregateEventStorage\Aggregate\Error\AggregateRootIsAlreadyTracked
      */
-    public function testTrackAgain()
+    public function testTrackAgainRightAway()
     {
         $account = Account::open(5, 'fixture-account-201', 25);
         $contract = (new SimplePhpFqcnContractResolver())->resolveFromClassName(Account::class);
 
         $this->unitOfWork->track($contract, 'fixture-account-201', $account);
         $this->unitOfWork->track($contract, 'fixture-account-201', $account);
+    }
+
+    /**
+     * @expectedException \Monii\AggregateEventStorage\EventStore\Persistence\OptimisticConcurrencyFailed
+     */
+    public function testTrackAgainExistingFixture()
+    {
+        $this->markTestIncomplete('Optimistic Concurrency is not yet implemented');
+
+        $account = Account::open(5, 'fixture-account-001', 25);
+        $contract = (new SimplePhpFqcnContractResolver())->resolveFromClassName(Account::class);
+
+        $this->unitOfWork->track($contract, 'fixture-account-001', $account);
+
+        $this->unitOfWork->commit(CommitId::fromString('6C13F32A-18F5-44B9-A55D-BFB3B4ED0607'));
     }
 
     /**
