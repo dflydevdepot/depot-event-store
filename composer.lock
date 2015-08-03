@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cfa250bc7ccce7e0e9934eea93ab144e",
+    "hash": "5c4d104a73d4e99d665d011a8a2f48ec",
     "packages": [],
     "packages-dev": [
         {
@@ -63,19 +63,20 @@
         },
         {
             "name": "monii/aggregate-event-storage-testing",
-            "version": "dev-master",
+            "version": "dev-Persistence-Test",
             "source": {
                 "type": "git",
                 "url": "git@github.com:monii/monii-aggregate-event-storage-testing.git",
-                "reference": "fcfec9f68384867ce2a859d74a3506c73394a086"
+                "reference": "4907a29e5e35c3353a07ac2c9eb1c644b932e8ff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/fcfec9f68384867ce2a859d74a3506c73394a086",
-                "reference": "fcfec9f68384867ce2a859d74a3506c73394a086",
+                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/4907a29e5e35c3353a07ac2c9eb1c644b932e8ff",
+                "reference": "4907a29e5e35c3353a07ac2c9eb1c644b932e8ff",
                 "shasum": ""
             },
             "require-dev": {
+                "monii/aggregate-event-storage": "dev-master",
                 "phpunit/phpunit": "^4.7",
                 "squizlabs/php_codesniffer": "^2.3"
             },
@@ -96,10 +97,10 @@
             ],
             "description": "Monii's Aggregate Event Storage Tests",
             "support": {
-                "source": "https://github.com/monii/monii-aggregate-event-storage-testing/tree/master",
+                "source": "https://github.com/monii/monii-aggregate-event-storage-testing/tree/Persistence-Test",
                 "issues": "https://github.com/monii/monii-aggregate-event-storage-testing/issues"
             },
-            "time": "2015-07-29 12:58:50"
+            "time": "2015-08-03 06:09:00"
         },
         {
             "name": "phpdocumentor/reflection-docblock",

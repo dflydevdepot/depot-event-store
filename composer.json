@@ -17,10 +17,10 @@
     "require-dev": {
         "phpunit/phpunit": "^4.7",
         "squizlabs/php_codesniffer": "^2.3",
-        "monii/aggregate-event-storage-testing": "dev-master"
+        "monii/aggregate-event-storage-testing": "dev-Persistence-Test"
     },
-	 "repositories": {
-        "monii-aggregate-event-storage": {
+    "repositories": {
+        "monii-aggregate-event-storage-testing": {
             "type": "vcs",
             "url": "https://github.com/monii/monii-aggregate-event-storage-testing"
         }

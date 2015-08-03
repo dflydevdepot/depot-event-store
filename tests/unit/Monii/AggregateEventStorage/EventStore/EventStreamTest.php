@@ -109,10 +109,10 @@ class EventStreamTest extends TestCase
         );
 
         // Commit EventStream - First Time
-        $commitIdOne = new CommitId();
+        $commitIdOne = CommitId::fromString('first-time');
 
         // Commit EventStream - First Time
-        $commitIdTwo = new CommitId();
+        $commitIdTwo = CommitId::fromString('second-time');
 
         $persistence = $this->getMockBuilder(Persistence::class)
             ->getMock();
