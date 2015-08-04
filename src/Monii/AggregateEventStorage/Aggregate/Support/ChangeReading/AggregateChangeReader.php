@@ -15,7 +15,7 @@ interface AggregateChangeReader
     public function getAggregateMetadata();
 
     /**
-     * @return object
+     * @return bool
      */
     public function getCanReadAggregateEventId();
 
@@ -23,6 +23,4 @@ interface AggregateChangeReader
      * @return object
      */
     public function getAggregateEventId();
-
-
 }
