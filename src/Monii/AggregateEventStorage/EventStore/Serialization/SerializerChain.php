@@ -14,7 +14,7 @@ class SerializerChain implements Serializer
 
     public function __construct(
         $serializers = array()
-    ){
+    ) {
         $this->serializers = $serializers;
     }
 
@@ -69,7 +69,7 @@ class SerializerChain implements Serializer
         throw new SerializationNotPossible();
     }
 
-    public function  pushSerializer($serializer)
+    public function pushSerializer($serializer)
     {
         $this->serializers[] = $serializer;
     }

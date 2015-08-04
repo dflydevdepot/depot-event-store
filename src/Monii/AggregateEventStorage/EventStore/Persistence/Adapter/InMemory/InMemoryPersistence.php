@@ -52,8 +52,8 @@ class InMemoryPersistence implements Persistence
                 $this->eventSerializer->deserialize($record->eventType, $record->event),
                 $record->metadataType,
                 $record->metadataType
-                    ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
-                    : null
+                ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
+                : null
             );
         }
 
@@ -86,10 +86,13 @@ class InMemoryPersistence implements Persistence
             $record->aggregateVersion = ++$aggregateVersion;
             $record->eventType = $eventEnvelope->getEventType();
             $record->eventId = $eventEnvelope->getEventId();
-            $record->event = $this->eventSerializer->serialize($eventEnvelope->getEventType(), $eventEnvelope->getEvent());
+            $record->event = $this->eventSerializer->serialize(
+                $eventEnvelope->getEventType(),
+                $eventEnvelope->getEvent()
+            );
             $record->metadataType = $eventEnvelope->getMetadataType();
             $record->metadata = $eventEnvelope->getMetadataType()
-                ? $this->metadataSerializer->serialize( $eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
+                ? $this->metadataSerializer->serialize($eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
                 : null
             ;
 
