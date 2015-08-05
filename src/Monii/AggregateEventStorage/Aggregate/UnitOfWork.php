@@ -8,7 +8,7 @@ use Monii\AggregateEventStorage\Contract\ContractResolver;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\EventIdentity\EventIdGenerator;
 use Monii\AggregateEventStorage\EventStore\EventStore;
-use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
+use Monii\AggregateEventStorage\EventStore\Transaction\CommitIdGenerator;
 
 class UnitOfWork
 {
@@ -38,6 +38,11 @@ class UnitOfWork
     private $eventIdGenerator;
 
     /**
+     * @var CommitIdGenerator
+     */
+    private $commitIdGenerator;
+
+    /**
      * @var object[]
      */
     private $trackedAggregates = [];
@@ -48,7 +53,8 @@ class UnitOfWork
         AggregateChangeManipulator $aggregateChangeManipulator,
         ContractResolver $eventContractResolver,
         ContractResolver $metadataContractResolver,
-        EventIdGenerator $eventIdGenerator = null
+        EventIdGenerator $eventIdGenerator = null,
+        CommitIdGenerator $commitIdGenerator = null
     ) {
         $this->eventStore = $eventStore;
         $this->aggregateManipulator = $aggregateManipulator;
@@ -56,6 +62,7 @@ class UnitOfWork
         $this->eventContractResolver = $eventContractResolver;
         $this->metadataContractResolver = $metadataContractResolver;
         $this->eventIdGenerator = $eventIdGenerator;
+        $this->commitIdGenerator = $commitIdGenerator;
     }
 
     /**
@@ -93,7 +100,7 @@ class UnitOfWork
         return array_key_exists($aggregateType->getContractName(), $this->trackedAggregates);
     }
 
-    public function commit(CommitId $commitId)
+    public function commit()
     {
         foreach ($this->trackedAggregates as $trackedAggregateTypes) {
             $aggregateType = $trackedAggregateTypes['contract'];
@@ -101,14 +108,13 @@ class UnitOfWork
                 $this->persist(
                     $aggregateType,
                     $this->aggregateManipulator->identify($aggregate),
-                    $aggregate,
-                    $commitId
+                    $aggregate
                 );
             }
         }
     }
 
-    private function persist(Contract $aggregateType, $aggregateId, $aggregate, CommitId $commitId)
+    private function persist(Contract $aggregateType, $aggregateId, $aggregate)
     {
         $this->ensureTrackedAggregateTypeIsPrepared($aggregateType);
 
@@ -134,7 +140,7 @@ class UnitOfWork
 
         $eventStream = $this->eventStore->create($aggregateType, $aggregateId);
         $eventStream->appendAll($eventEnvelopes);
-        $eventStream->commit($commitId);
+        $eventStream->commit($this->commitIdGenerator->generateCommitId());
 
         $this->aggregateManipulator->clearChanges($aggregate);
     }

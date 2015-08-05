@@ -2,10 +2,10 @@
 
 namespace Monii\AggregateEventStorage\EventStore\Transaction;
 
-interface CommitIdFactory
+interface CommitIdGenerator
 {
     /**
      * @return CommitId
      */
-    public function createCommitId();
+    public function generateCommitId();
 }
