@@ -53,7 +53,6 @@ class UnitOfWorkTest extends TestCase
             ->method('generateCommitId')
             ->will($this->onConsecutiveCalls(
                 CommitId::fromString('8126175E-854F-4D9F-A56B-EB3C57C6D8DF'),
-                null,
                 CommitId::fromString('6C13F32A-18F5-44B9-A55D-BFB3B4ED0607'),
                 CommitId::fromString('F9310D1A-7D43-47EA-9F70-175D4CDE04F0')
             ));
