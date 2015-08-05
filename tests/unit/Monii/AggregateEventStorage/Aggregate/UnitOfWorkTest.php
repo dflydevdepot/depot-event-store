@@ -16,6 +16,7 @@ use Monii\AggregateEventStorage\EventStore\Persistence\Adapter\InMemory\InMemory
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
 use Monii\AggregateEventStorage\EventStore\Serialization\Adapter\PropertiesReflection\PropertiesReflectionSerializer;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
+use Monii\AggregateEventStorage\EventStore\Transaction\CommitIdGenerator;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\Account;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceDecreased;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
@@ -44,6 +45,18 @@ class UnitOfWorkTest extends TestCase
 
         $eventStore = new EventStore($persistence);
 
+        $commitIdGenerator = $this->getMockBuilder(CommitIdGenerator::class)
+            ->getMock();
+
+        $commitIdGenerator
+            ->expects($this->any())
+            ->method('generateCommitId')
+            ->will($this->onConsecutiveCalls(
+                CommitId::fromString('8126175E-854F-4D9F-A56B-EB3C57C6D8DF'),
+                CommitId::fromString('6C13F32A-18F5-44B9-A55D-BFB3B4ED0607'),
+                CommitId::fromString('F9310D1A-7D43-47EA-9F70-175D4CDE04F0')
+            ));
+
         $this->unitOfWork = new UnitOfWork(
             $eventStore,
             new AggregateManipulator(
@@ -58,7 +71,9 @@ class UnitOfWorkTest extends TestCase
                 new NamedConstructorChangeWriter(BankingEventEnvelope::class)
             ),
             new SimplePhpFqcnContractResolver(),
-            new SimplePhpFqcnContractResolver()
+            new SimplePhpFqcnContractResolver(),
+            null,
+            $commitIdGenerator
         );
     }
 
@@ -85,7 +100,7 @@ class UnitOfWorkTest extends TestCase
         $this->assertCount(0, $account->getCommittedEvents());
         $this->assertCount(3, $account->getHandledEvents());
 
-        $this->unitOfWork->commit(CommitId::fromString('8126175E-854F-4D9F-A56B-EB3C57C6D8DF'));
+        $this->unitOfWork->commit();
     }
 
     /**
@@ -112,7 +127,7 @@ class UnitOfWorkTest extends TestCase
 
         $this->unitOfWork->track($contract, 'fixture-account-001', $account);
 
-        $this->unitOfWork->commit(CommitId::fromString('6C13F32A-18F5-44B9-A55D-BFB3B4ED0607'));
+        $this->unitOfWork->commit();
     }
 
     /**
@@ -159,7 +174,7 @@ class UnitOfWorkTest extends TestCase
         $this->assertCount(2, $account->getCommittedEvents());
         $this->assertCount(5, $account->getHandledEvents());
 
-        $this->unitOfWork->commit(CommitId::fromString('F9310D1A-7D43-47EA-9F70-175D4CDE04F0'));
+        $this->unitOfWork->commit();
 
         $this->assertcount(0, $account->getAggregateChanges());
         $this->assertCount(5, $account->getCommittedEvents());

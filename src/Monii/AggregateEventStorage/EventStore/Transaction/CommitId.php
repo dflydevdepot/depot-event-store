@@ -4,11 +4,11 @@ namespace Monii\AggregateEventStorage\EventStore\Transaction;
 
 class CommitId
 {
-    private $value;
+    private $commitId;
 
-    private function __construct($value)
+    private function __construct($commitId)
     {
-        $this->value = $value;
+        $this->commitId = $commitId;
     }
     public static function fromString($string)
     {
@@ -16,6 +16,6 @@ class CommitId
     }
     public function __toString()
     {
-        return (string) $this->value;
+        return (string) $this->commitId;
     }
 }
