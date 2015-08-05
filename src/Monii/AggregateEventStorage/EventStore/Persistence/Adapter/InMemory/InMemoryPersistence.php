@@ -91,10 +91,11 @@ class InMemoryPersistence implements Persistence
                 $eventEnvelope->getEvent()
             );
             $record->metadataType = $eventEnvelope->getMetadataType();
-            $record->metadata = $eventEnvelope->getMetadataType()
-                ? $this->metadataSerializer->serialize($eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
+            $metadata = $record->metadataType
+                ? $this->metadataSerializer->serialize($record->metadataType, $eventEnvelope->getMetadata())
                 : null
             ;
+            $record->metadata = $metadata;
 
             $this->records[] = $record;
         }
