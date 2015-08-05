@@ -4,6 +4,8 @@ import subprocess
 import xml.etree.ElementTree as ET
 
 def get_coverage_clover(coverage_clover):
+  if not os.path.isfile(coverage_clover):
+    return None
   tree = ET.parse(coverage_clover)
   root = tree.getroot()
 
