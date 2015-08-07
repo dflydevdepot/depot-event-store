@@ -4,6 +4,7 @@ namespace Monii\AggregateEventStorage\EventStore\Persistence\Adapter\InMemory;
 
 use Monii\AggregateEventStorage\Contract\Contract;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
+use Monii\AggregateEventStorage\EventStore\Persistence\OptimisticConcurrencyFailed;
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
 use Monii\AggregateEventStorage\EventStore\Serialization\Serializer;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
@@ -53,6 +54,7 @@ class InMemoryPersistence implements Persistence
                 $record->eventType,
                 $record->eventId,
                 $this->eventSerializer->deserialize($record->eventType, $record->event),
+                $record->version,
                 $record->metadataType,
                 $metadata
             );
@@ -75,7 +77,11 @@ class InMemoryPersistence implements Persistence
         $expectedAggregateVersion,
         array $eventEnvelopes
     ) {
-        $aggregateVersion = $expectedAggregateVersion;
+        $aggregateVersion = $this->versionFor($aggregateType, $aggregateId);
+
+        if ($aggregateVersion !== $expectedAggregateVersion) {
+            throw new OptimisticConcurrencyFailed();
+        }
 
         foreach ($eventEnvelopes as $eventEnvelope) {
 
@@ -96,10 +102,24 @@ class InMemoryPersistence implements Persistence
                 $eventEnvelope->getEventType(),
                 $eventEnvelope->getEvent()
             );
+            $record->version = $eventEnvelope->getVersion();
             $record->metadataType = $eventEnvelope->getMetadataType();
             $record->metadata = $metadata;
 
             $this->records[] = $record;
         }
+    }
+
+    private function versionFor(Contract $aggregateType, $aggregateId)
+    {
+        $version = -1;
+
+        foreach ($this->fetch($aggregateType, $aggregateId) as $eventEnvelope) {
+            if ($eventEnvelope->getVersion() > $version) {
+                $version = $eventEnvelope->getVersion();
+            }
+        }
+
+        return $version;
     }
 }

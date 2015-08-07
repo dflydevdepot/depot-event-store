@@ -7,8 +7,15 @@ use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\ChangesExtractor;
 use Monii\AggregateEventStorage\Aggregate\Identification\Identifier;
 use Monii\AggregateEventStorage\Aggregate\Instantiation\Instantiator;
 use Monii\AggregateEventStorage\Aggregate\Reconstitution\Reconstituter;
+use Monii\AggregateEventStorage\Aggregate\VersionReading\VersionReader;
 
-class AggregateManipulator implements Instantiator, Reconstituter, Identifier, ChangesExtractor, ChangesClearor
+class AggregateManipulator implements
+    Instantiator,
+    Reconstituter,
+    Identifier,
+    VersionReader,
+    ChangesExtractor,
+    ChangesClearor
 {
     /**
      * @var Instantiator
@@ -26,6 +33,11 @@ class AggregateManipulator implements Instantiator, Reconstituter, Identifier, C
     private $identifier;
 
     /**
+     * @var VersionReader
+     */
+    private $versionReader;
+
+    /**
      * @var ChangesExtractor
      */
     private $changesExtractor;
@@ -39,12 +51,14 @@ class AggregateManipulator implements Instantiator, Reconstituter, Identifier, C
         Instantiator $instantiator,
         Reconstituter $reconstituter,
         Identifier $identifier,
+        VersionReader $versionReader,
         ChangesExtractor $changesExtractor,
         ChangesClearor $changesClearor
     ) {
         $this->instantiator = $instantiator;
         $this->reconstituter = $reconstituter;
         $this->identifier = $identifier;
+        $this->versionReader = $versionReader;
         $this->changesExtractor = $changesExtractor;
         $this->changesClearor = $changesClearor;
     }
@@ -71,6 +85,14 @@ class AggregateManipulator implements Instantiator, Reconstituter, Identifier, C
     public function identify($object)
     {
         return $this->identifier->identify($object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readVersion($object)
+    {
+        return $this->versionReader->readVersion($object);
     }
 
     /**

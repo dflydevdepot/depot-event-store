@@ -48,6 +48,11 @@ class InMemoryPersistenceRecord
     public $event;
 
     /**
+     * @var int
+     */
+    public $version;
+
+    /**
      * @var Contract|null
      */
     public $metadataType;

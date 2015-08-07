@@ -20,12 +20,13 @@ class EventStoreTest extends TestCase
         $this->contractResolver = new SimplePhpFqcnContractResolver();
     }
 
-    private function createEventEnvelope($eventId, $event)
+    private function createEventEnvelope($eventId, $event, $version)
     {
         return new EventEnvelope(
             $this->contractResolver->resolveFromObject($event),
             $eventId,
-            $event
+            $event,
+            $version
         );
     }
 
@@ -48,7 +49,8 @@ class EventStoreTest extends TestCase
 
         $appendedEventEnvelope = $this->createEventEnvelope(
             123,
-            new AccountWasOpened('fixture-account-000', 25)
+            new AccountWasOpened('fixture-account-000', 25),
+            0
         );
 
         $eventStream->append($appendedEventEnvelope);
@@ -66,7 +68,8 @@ class EventStoreTest extends TestCase
 
         $existingEventEnvelope = $this->createEventEnvelope(
             123,
-            new AccountWasOpened('fixture-account-000', 25)
+            new AccountWasOpened('fixture-account-000', 25),
+            0
         );
 
         $persistence = $this->getMockBuilder(Persistence::class)
@@ -84,7 +87,8 @@ class EventStoreTest extends TestCase
 
         $appendedEventEnvelope = $this->createEventEnvelope(
             124,
-            new AccountBalanceIncreased('fixture-account-000', 10)
+            new AccountBalanceIncreased('fixture-account-000', 10),
+            1
         );
 
         $eventStream->append($appendedEventEnvelope);

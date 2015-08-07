@@ -1,16 +1,16 @@
 <?php
 
-namespace Monii\AggregateEventStorage\Aggregate\ChangesExtraction;
+namespace Monii\AggregateEventStorage\Aggregate\VersionReading;
 
 use Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported;
-use Monii\AggregateEventStorage\Aggregate\Support\ChangesExtraction\AggregateChangesRecording;
+use Monii\AggregateEventStorage\Aggregate\Support\VersionReading\AggregateVersionReading;
 
-class PublicMethodChangeExtractor implements ChangesExtractor
+class PublicMethodVersionReader implements VersionReader
 {
     /**
      * @var string
      */
-    private $extractChangesMethod;
+    private $readVersionMethod;
 
     /**
      * @var string
@@ -18,24 +18,24 @@ class PublicMethodChangeExtractor implements ChangesExtractor
     private $supportedObjectType;
 
     /**
-     * @param string $extractChangesMethod popRecordedChanges
+     * @param string $readVersionMethod popRecordedChanges
      */
     public function __construct(
-        $extractChangesMethod = 'getAggregateChanges',
-        $supportedObjectType = AggregateChangesRecording::class
+        $readVersionMethod = 'getAggregateVersion',
+        $supportedObjectType = AggregateVersionReading::class
     ) {
-        $this->extractChangesMethod = $extractChangesMethod;
+        $this->readVersionMethod = $readVersionMethod;
         $this->supportedObjectType = $supportedObjectType;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function extractChanges($object)
+    public function readVersion($object)
     {
         $this->assertObjectIsSupported($object);
 
-        return call_user_func([$object, $this->extractChangesMethod]);
+        return call_user_func([$object, $this->readVersionMethod]);
     }
 
     private function assertObjectIsSupported($object)

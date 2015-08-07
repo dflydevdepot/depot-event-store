@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\Support\ChangeReading;
 
-interface AggregateChangeReader
+interface AggregateChangeReading
 {
     /**
      * @return object
@@ -23,4 +23,14 @@ interface AggregateChangeReader
      * @return object
      */
     public function getAggregateEventId();
+
+    /**
+     * @return bool
+     */
+    public function getCanReadAggregateEventVersion();
+
+    /**
+     * @return object
+     */
+    public function getAggregateEventVersion();
 }

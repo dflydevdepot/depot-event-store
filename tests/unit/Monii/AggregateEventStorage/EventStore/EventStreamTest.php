@@ -21,12 +21,13 @@ class EventStreamTest extends TestCase
         $this->contractResolver = new SimplePhpFqcnContractResolver();
     }
 
-    private function createEventEnvelope($eventId, $event)
+    private function createEventEnvelope($eventId, $event, $version)
     {
         return new EventEnvelope(
             $this->contractResolver->resolveFromObject($event),
             $eventId,
-            $event
+            $event,
+            $version
         );
     }
 
@@ -47,7 +48,8 @@ class EventStreamTest extends TestCase
 
         $appendedEventEnvelope = $this->createEventEnvelope(
             123,
-            new AccountWasOpened('fixture-account-000', 25)
+            new AccountWasOpened('fixture-account-000', 25),
+            0
         );
 
         $eventStream->append($appendedEventEnvelope);
@@ -65,7 +67,8 @@ class EventStreamTest extends TestCase
 
         $existingEventEnvelope = $this->createEventEnvelope(
             123,
-            new AccountWasOpened('fixture-account-000', 25)
+            new AccountWasOpened('fixture-account-000', 25),
+            0
         );
 
         $persistence = $this->getMockBuilder(Persistence::class)
@@ -81,7 +84,8 @@ class EventStreamTest extends TestCase
 
         $appendedEventEnvelope = $this->createEventEnvelope(
             124,
-            new AccountBalanceIncreased('fixture-account-000', 10)
+            new AccountBalanceIncreased('fixture-account-000', 10),
+            1
         );
 
         $eventStream->append($appendedEventEnvelope);
@@ -100,12 +104,14 @@ class EventStreamTest extends TestCase
 
         $appendedEventEnvelopeOne = $this->createEventEnvelope(
             123,
-            new AccountWasOpened('fixture-account-000', 25)
+            new AccountWasOpened('fixture-account-000', 25),
+            0
         );
 
         $appendedEventEnvelopeTwo = $this->createEventEnvelope(
             124,
-            new AccountWasOpened('fixture-account-001', 35)
+            new AccountWasOpened('fixture-account-001', 35),
+            1
         );
 
         // Commit EventStream - First Time

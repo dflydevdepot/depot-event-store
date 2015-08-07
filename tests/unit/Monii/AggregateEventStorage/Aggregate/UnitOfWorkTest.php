@@ -3,12 +3,13 @@
 namespace Monii\AggregateEventStorage\Aggregate;
 
 use Monii\AggregateEventStorage\Aggregate\ChangeReading\PublicMethodsChangeReader;
-use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangeClearor;
-use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangeExtractor;
+use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangesClearor;
+use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangesExtractor;
 use Monii\AggregateEventStorage\Aggregate\ChangeWriting\NamedConstructorChangeWriter;
 use Monii\AggregateEventStorage\Aggregate\Identification\PublicMethodIdentifier;
 use Monii\AggregateEventStorage\Aggregate\Instantiation\NamedConstructorInstantiator;
 use Monii\AggregateEventStorage\Aggregate\Reconstitution\PublicMethodReconstituter;
+use Monii\AggregateEventStorage\Aggregate\VersionReading\PublicMethodVersionReader;
 use Monii\AggregateEventStorage\Contract\SimplePhpFqcnContractResolver;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\EventStore;
@@ -63,8 +64,9 @@ class UnitOfWorkTest extends TestCase
                 new NamedConstructorInstantiator(),
                 new PublicMethodReconstituter(),
                 new PublicMethodIdentifier(),
-                new PublicMethodChangeExtractor(),
-                new PublicMethodChangeClearor()
+                new PublicMethodVersionReader(),
+                new PublicMethodChangesExtractor(),
+                new PublicMethodChangesClearor()
             ),
             new AggregateChangeManipulator(
                 new PublicMethodsChangeReader(),
@@ -120,8 +122,6 @@ class UnitOfWorkTest extends TestCase
      */
     public function testTrackAgainExistingFixture()
     {
-        $this->markTestIncomplete('Optimistic Concurrency is not yet implemented');
-
         $account = Account::open(5, 'fixture-account-001', 25);
         $contract = (new SimplePhpFqcnContractResolver())->resolveFromClassName(Account::class);
 
@@ -182,12 +182,13 @@ class UnitOfWorkTest extends TestCase
     }
 
 
-    protected function createEventEnvelope($eventId, $event)
+    protected function createEventEnvelope($eventId, $event, $version)
     {
         return new EventEnvelope(
             (new SimplePhpFqcnContractResolver())->resolveFromObject($event),
             $eventId,
-            $event
+            $event,
+            $version
         );
     }
 
@@ -224,11 +225,12 @@ class UnitOfWorkTest extends TestCase
             '4A9F269C-27D5-46C2-9FDF-F7A7D61C55D4',
             Account::class,
             'fixture-account-000',
-            0,
+            -1,
             [
                 $this->createEventEnvelope(
                     123,
-                    new AccountWasOpened('fixture-account-000', 25)
+                    new AccountWasOpened('fixture-account-000', 25),
+                    0
                 ),
             ]
         );
@@ -238,23 +240,27 @@ class UnitOfWorkTest extends TestCase
             '75BCD437-F184-4305-AB61-784761536783',
             Account::class,
             'fixture-account-001',
-            0,
+            -1,
             [
                 $this->createEventEnvelope(
                     124,
-                    new AccountWasOpened('fixture-account-001', 10)
+                    new AccountWasOpened('fixture-account-001', 10),
+                    0
                 ),
                 $this->createEventEnvelope(
                     125,
-                    new AccountBalanceIncreased('fixture-account-001', 15)
+                    new AccountBalanceIncreased('fixture-account-001', 15),
+                    1
                 ),
                 $this->createEventEnvelope(
                     126,
-                    new AccountBalanceDecreased('fixture-account-001', 5)
+                    new AccountBalanceDecreased('fixture-account-001', 5),
+                    2
                 ),
                 $this->createEventEnvelope(
                     127,
-                    new AccountBalanceIncreased('fixture-account-001', 45)
+                    new AccountBalanceIncreased('fixture-account-001', 45),
+                    3
                 ),
             ]
         );
@@ -264,11 +270,12 @@ class UnitOfWorkTest extends TestCase
             '1264416A-7465-4241-A810-B5EFBD1988E2',
             Account::class,
             'fixture-account-000',
-            1,
+            0,
             [
                 $this->createEventEnvelope(
                     128,
-                    new AccountBalanceIncreased('fixture-account-000', 30)
+                    new AccountBalanceIncreased('fixture-account-000', 30),
+                    1
                 ),
             ]
         );
@@ -278,15 +285,17 @@ class UnitOfWorkTest extends TestCase
             'D68A5BFD-6A61-44A7-BF10-ECEFE776A141',
             Account::class,
             'fixture-account-001',
-            4,
+            3,
             [
                 $this->createEventEnvelope(
                     129,
-                    new AccountBalanceDecreased('fixture-account-001', 75)
+                    new AccountBalanceDecreased('fixture-account-001', 75),
+                    4
                 ),
                 $this->createEventEnvelope(
                     130,
-                    new AccountBalanceIncreased('fixture-account-001', 90)
+                    new AccountBalanceIncreased('fixture-account-001', 90),
+                    5
                 ),
             ]
         );
@@ -296,15 +305,17 @@ class UnitOfWorkTest extends TestCase
             'A8DA72AB-1405-463A-AF16-BF170A5D304E',
             Account::class,
             'fixture-account-001',
-            6,
+            5,
             [
                 $this->createEventEnvelope(
                     131,
-                    new AccountBalanceIncreased('fixture-account-001', 125)
+                    new AccountBalanceIncreased('fixture-account-001', 125),
+                    6
                 ),
                 $this->createEventEnvelope(
                     132,
-                    new AccountBalanceDecreased('fixture-account-001', 15)
+                    new AccountBalanceDecreased('fixture-account-001', 15),
+                    7
                 ),
             ]
         );

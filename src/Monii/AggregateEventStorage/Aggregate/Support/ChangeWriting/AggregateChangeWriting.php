@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\Support\ChangeWriting;
 
-interface AggregateChangeWriter
+interface AggregateChangeWriting
 {
     /**
      * @return static

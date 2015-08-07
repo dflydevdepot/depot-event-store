@@ -52,6 +52,22 @@ class AggregateChangeManipulator implements ChangeReader, ChangeWriter
     /**
      * {@inheritdoc}
      */
+    public function canReadEventVersion($change)
+    {
+        return $this->changeReader->canReadEventVersion($change);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readEventVersion($change)
+    {
+        return $this->changeReader->readEventVersion($change);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function readMetadata($change)
     {
         return $this->changeReader->readMetadata($change);
@@ -60,8 +76,8 @@ class AggregateChangeManipulator implements ChangeReader, ChangeWriter
     /**
      * {@inheritdoc}
      */
-    public function writeChange($eventId, $event, $metadata = null)
+    public function writeChange($eventId, $event, $metadata = null, $version = null)
     {
-        return $this->changeWriter->writeChange($eventId, $event, $metadata);
+        return $this->changeWriter->writeChange($eventId, $event, $metadata, $version);
     }
 }

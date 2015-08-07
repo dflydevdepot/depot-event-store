@@ -31,4 +31,18 @@ interface ChangeReader
      * @return string|null
      */
     public function readEventId($change);
+
+    /**
+     * @param object $change
+     *
+     * @return bool
+     */
+    public function canReadEventVersion($change);
+
+    /**
+     * @param object $change
+     *
+     * @return int|null
+     */
+    public function readEventVersion($change);
 }
