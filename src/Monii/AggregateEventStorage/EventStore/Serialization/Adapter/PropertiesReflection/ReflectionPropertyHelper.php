@@ -39,7 +39,6 @@ class ReflectionPropertyHelper
             if (!empty($types)) {
                 foreach ($types as $type) {
                     if (class_exists($type)) {
-
                         // Object
                         $this->types[] = $type;
 
@@ -51,7 +50,6 @@ class ReflectionPropertyHelper
                     } else {
                         $type = $reflectionClass->getNamespaceName() . '\\' . $type;
                         if (class_exists($type)) {
-
                             // Object
                             $this->types[] = $type;
 

@@ -6,11 +6,10 @@ use RuntimeException;
 
 class OptimisticConcurrencyFailed extends RuntimeException
 {
-    static public function becauseExpectedAggregateVersionDoesNotMatch(
+    public static function becauseExpectedAggregateVersionDoesNotMatch(
         $expectedAggregateVersion,
         $actualAggregateVersion
-    )
-    {
+    ) {
         $message = sprintf(
             'Expected aggregate version % s but got % s instead',
             $expectedAggregateVersion,

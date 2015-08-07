@@ -8,5 +8,4 @@ class ChangeIsEventWriter implements ChangeWriter
     {
         return $event;
     }
-
 }

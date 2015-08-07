@@ -72,8 +72,10 @@ class PropertiesReflectionSerializer implements Serializer
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
             $property = new ReflectionPropertyHelper($reflectionClass, $reflectionProperty);
             if ($property->isObject()) {
-                $property->setValue($object, $this->subDeserialize($property->getType(), $data[$reflectionProperty->getName()]));
-                //
+                $property->setValue($object, $this->subDeserialize(
+                    $property->getType(),
+                    $data[$reflectionProperty->getName()]
+                ));
             } else {
                 $property->setValue($object, $data[$reflectionProperty->getName()]);
             }

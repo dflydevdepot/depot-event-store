@@ -45,15 +45,16 @@ class InMemoryPersistence implements Persistence
             if ($aggregateId != $record->aggregateId) {
                 continue;
             }
-
+            $metadata = $record->metadataType
+                ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
+                : null
+            ;
             $eventEnvelopes[] = new EventEnvelope(
                 $record->eventType,
                 $record->eventId,
                 $this->eventSerializer->deserialize($record->eventType, $record->event),
                 $record->metadataType,
-                $record->metadataType
-                    ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
-                    : null
+                $metadata
             );
         }
 
@@ -77,6 +78,11 @@ class InMemoryPersistence implements Persistence
         $aggregateVersion = $expectedAggregateVersion;
 
         foreach ($eventEnvelopes as $eventEnvelope) {
+
+            $metadata = $eventEnvelope->getMetadataType()
+                ? $this->metadataSerializer->serialize($eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
+                : null
+            ;
             $record = new InMemoryPersistenceRecord();
 
             $record->commitId = $commitId;
@@ -86,12 +92,12 @@ class InMemoryPersistence implements Persistence
             $record->aggregateVersion = ++$aggregateVersion;
             $record->eventType = $eventEnvelope->getEventType();
             $record->eventId = $eventEnvelope->getEventId();
-            $record->event = $this->eventSerializer->serialize($eventEnvelope->getEventType(), $eventEnvelope->getEvent());
+            $record->event = $this->eventSerializer->serialize(
+                $eventEnvelope->getEventType(),
+                $eventEnvelope->getEvent()
+            );
             $record->metadataType = $eventEnvelope->getMetadataType();
-            $record->metadata = $eventEnvelope->getMetadataType()
-                ? $this->metadataSerializer->serialize( $eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
-                : null
-            ;
+            $record->metadata = $metadata;
 
             $this->records[] = $record;
         }
