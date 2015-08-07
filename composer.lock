@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "66219334cc32c4d964fa8cddfe6666fa",
+    "hash": "463da4ad41510bf8513bed87a0f188df",
     "packages": [],
     "packages-dev": [
         {
@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:monii/monii-aggregate-event-storage-testing.git",
-                "reference": "f2d49d4ebd077b116f4e068d1b3ca3e9a62d71d2"
+                "reference": "d28ab87932aa3704436ba7b251149c5eeecaa86c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/f2d49d4ebd077b116f4e068d1b3ca3e9a62d71d2",
-                "reference": "f2d49d4ebd077b116f4e068d1b3ca3e9a62d71d2",
+                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/d28ab87932aa3704436ba7b251149c5eeecaa86c",
+                "reference": "d28ab87932aa3704436ba7b251149c5eeecaa86c",
                 "shasum": ""
             },
             "require-dev": {
@@ -105,7 +105,7 @@
                 "source": "https://github.com/monii/monii-aggregate-event-storage-testing/tree/master",
                 "issues": "https://github.com/monii/monii-aggregate-event-storage-testing/issues"
             },
-            "time": "2015-08-03 18:41:20"
+            "time": "2015-08-05 18:06:35"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
