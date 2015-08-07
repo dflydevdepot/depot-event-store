@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\Support\Identification;
 
-interface AggregateIdentity
+interface AggregateIdentification
 {
     /**
      * @return string

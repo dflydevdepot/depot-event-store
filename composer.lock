@@ -67,12 +67,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:monii/monii-aggregate-event-storage-testing.git",
-                "reference": "d28ab87932aa3704436ba7b251149c5eeecaa86c"
+                "reference": "d95a4958e64ea3d481c36275f6d2ec421cf7b2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/d28ab87932aa3704436ba7b251149c5eeecaa86c",
-                "reference": "d28ab87932aa3704436ba7b251149c5eeecaa86c",
+                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/d95a4958e64ea3d481c36275f6d2ec421cf7b2c9",
+                "reference": "d95a4958e64ea3d481c36275f6d2ec421cf7b2c9",
                 "shasum": ""
             },
             "require-dev": {
@@ -105,7 +105,7 @@
                 "source": "https://github.com/monii/monii-aggregate-event-storage-testing/tree/master",
                 "issues": "https://github.com/monii/monii-aggregate-event-storage-testing/issues"
             },
-            "time": "2015-08-05 18:06:35"
+            "time": "2015-08-07 06:19:34"
         },
         {
             "name": "phpdocumentor/reflection-docblock",

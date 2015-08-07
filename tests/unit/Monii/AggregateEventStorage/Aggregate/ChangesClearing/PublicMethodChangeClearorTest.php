@@ -1,6 +1,6 @@
 <?php
 
-use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangeClearor;
+use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangesClearor;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class PublicMethodChangeClearorTest extends TestCase
@@ -16,7 +16,7 @@ class PublicMethodChangeClearorTest extends TestCase
         // We only expect the clearAggregateChanges method to be called once
         $object->expects($this->once())->method('clearAggregateChanges');
 
-        $changeClearor = new PublicMethodChangeClearor();
+        $changeClearor = new PublicMethodChangesClearor();
         $changeClearor->clearChanges($object);
 
     }
@@ -27,7 +27,7 @@ class PublicMethodChangeClearorTest extends TestCase
         $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
         $object = new \DateTimeImmutable();
 
-        $changeClearor = new PublicMethodChangeClearor();
+        $changeClearor = new PublicMethodChangesClearor();
         $changeClearor->clearChanges($object);
     }
 }

@@ -109,7 +109,7 @@ class EventStream
             $commitId,
             $this->aggregateType,
             $this->aggregateId,
-            count($this->committedEventEnvelopes),
+            count($this->committedEventEnvelopes) - 1,
             $this->pendingEventEnvelopes
         );
         $this->committedEventEnvelopes = array_merge($this->committedEventEnvelopes, $this->pendingEventEnvelopes);

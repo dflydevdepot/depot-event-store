@@ -1,6 +1,8 @@
 <?php
 
-use Monii\AggregateEventStorage\Aggregate\ChangeReading\PublicMethodsChangeReader;
+namespace Monii\AggregateEventStorage\Aggregate\ChangeReading;
+
+use Monii\AggregateEventStorage\Aggregate\Support\ChangeReading\AggregateChangeReading;
 use PHPUnit_Framework_TestCase as TestCase;
 
 class PublicMethodsChangeReaderTest extends TestCase
@@ -10,7 +12,7 @@ class PublicMethodsChangeReaderTest extends TestCase
         // Create a mock of AggregateChangesReader
         // only mock the getAggregateEvent() method.
         $object = $this
-            ->getMockBuilder('Monii\AggregateEventStorage\Aggregate\Support\ChangeReading\AggregateChangeReader')
+            ->getMockBuilder(AggregateChangeReading::class)
             //->setMethods(array('getAggregateEvent'))
             ->getMock();
         // We only expect the getAggregateEvent method to be called once
@@ -21,10 +23,11 @@ class PublicMethodsChangeReaderTest extends TestCase
 
     }
 
-    /** @expectedException AggregateNotSupported */
+    /**
+     * @expectedException \Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported
+     */
     public function testUnhappyChangeReaderCalledOnce()
     {
-        $this->setExpectedException('Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported');
         $object = new \DateTimeImmutable();
 
         $changeClearor = new PublicMethodsChangeReader();

@@ -2,11 +2,12 @@
 
 namespace Monii\AggregateEventStorage\Aggregate;
 
-use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangeExtractor;
-use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangeClearor;
+use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangesExtractor;
+use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangesClearor;
 use Monii\AggregateEventStorage\Aggregate\Identification\PublicMethodIdentifier;
 use Monii\AggregateEventStorage\Aggregate\Instantiation\NamedConstructorInstantiator;
 use Monii\AggregateEventStorage\Aggregate\Reconstitution\PublicMethodReconstituter;
+use Monii\AggregateEventStorage\Aggregate\VersionReading\PublicMethodVersionReader;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\Account;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceDecreased;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\AccountBalanceIncreased;
@@ -52,8 +53,9 @@ class AggregateManipulatorTest extends TestCase
             new NamedConstructorInstantiator(),
             new PublicMethodReconstituter(),
             new PublicMethodIdentifier(),
-            new PublicMethodChangeExtractor(),
-            new PublicMethodChangeClearor()
+            new PublicMethodVersionReader(),
+            new PublicMethodChangesExtractor(),
+            new PublicMethodChangesClearor()
         );
     }
 
@@ -101,5 +103,14 @@ class AggregateManipulatorTest extends TestCase
         $accountId = $this->getAggregateManipulator()->identify($account);
 
         $this->assertEquals('fixture-account-000', $accountId);
+    }
+
+    public function testVersionReading()
+    {
+        $account = $this->getAccountFixture();
+
+        $version = $this->getAggregateManipulator()->readVersion($account);
+
+        $this->assertEquals(3, $version);
     }
 }

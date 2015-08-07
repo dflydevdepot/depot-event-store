@@ -2,7 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\Support\ChangesExtraction;
 
-interface AggregateChangesRecording
+interface AggregateChangesExtraction
 {
     /**
      * @return array

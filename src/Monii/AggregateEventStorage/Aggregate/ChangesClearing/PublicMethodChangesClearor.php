@@ -1,16 +1,16 @@
 <?php
 
-namespace Monii\AggregateEventStorage\Aggregate\Identification;
+namespace Monii\AggregateEventStorage\Aggregate\ChangesClearing;
 
 use Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported;
-use Monii\AggregateEventStorage\Aggregate\Support\Identification\AggregateIdentification;
+use Monii\AggregateEventStorage\Aggregate\Support\ChangesClearing\AggregateChangesClearing;
 
-class PublicMethodIdentifier implements Identifier
+class PublicMethodChangesClearor implements ChangesClearor
 {
     /**
      * @var string
      */
-    private $identifyMethod;
+    private $clearChangesMethod;
 
     /**
      * @var string
@@ -18,24 +18,24 @@ class PublicMethodIdentifier implements Identifier
     private $supportedObjectType;
 
     /**
-     * @param string $extractChangesMethod getAggregateIdentity
+     * @param string $extractChangesMethod popRecordedChanges
      */
     public function __construct(
-        $extractChangesMethod = 'getAggregateIdentity',
-        $supportedObjectType = AggregateIdentification::class
+        $extractChangesMethod = 'clearAggregateChanges',
+        $supportedObjectType = AggregateChangesClearing::class
     ) {
-        $this->identifyMethod = $extractChangesMethod;
+        $this->clearChangesMethod = $extractChangesMethod;
         $this->supportedObjectType = $supportedObjectType;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function identify($object)
+    public function clearChanges($object)
     {
         $this->assertObjectIsSupported($object);
 
-        return call_user_func([$object, $this->identifyMethod]);
+        return call_user_func([$object, $this->clearChangesMethod]);
     }
 
     private function assertObjectIsSupported($object)

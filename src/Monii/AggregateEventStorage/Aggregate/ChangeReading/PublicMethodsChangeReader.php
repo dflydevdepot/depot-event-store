@@ -3,7 +3,7 @@
 namespace Monii\AggregateEventStorage\Aggregate\ChangeReading;
 
 use Monii\AggregateEventStorage\Aggregate\Error\AggregateNotSupported;
-use Monii\AggregateEventStorage\Aggregate\Support\ChangeReading\AggregateChangeReader;
+use Monii\AggregateEventStorage\Aggregate\Support\ChangeReading\AggregateChangeReading;
 
 class PublicMethodsChangeReader implements ChangeReader
 {
@@ -30,6 +30,16 @@ class PublicMethodsChangeReader implements ChangeReader
     /**
      * @var string
      */
+    private $canReadEventVersionMethodName;
+
+    /**
+     * @var string
+     */
+    private $readEventVersionMethodName;
+
+    /**
+     * @var string
+     */
     private $supportedObjectType;
 
     /**
@@ -37,6 +47,8 @@ class PublicMethodsChangeReader implements ChangeReader
      * @param string $readMetadataMethodName
      * @param string $canReadEventIdMethodName
      * @param string $readEventIdMethodName
+     * @param string $canReadEventVersionMethodName
+     * @param string $readEventVersionMethodName
      * @param $supportedObjectType
      */
     public function __construct(
@@ -44,12 +56,16 @@ class PublicMethodsChangeReader implements ChangeReader
         $readMetadataMethodName = 'getAggregateMetadata',
         $canReadEventIdMethodName = 'getCanReadAggregateEventId',
         $readEventIdMethodName = 'getAggregateEventId',
-        $supportedObjectType = AggregateChangeReader::class
+        $canReadEventVersionMethodName = 'getAggregateEventVersion',
+        $readEventVersionMethodName = 'getAggregateEventVersion',
+        $supportedObjectType = AggregateChangeReading::class
     ) {
         $this->readEventMethodName = $readEventMethodName;
         $this->readMetadataMethodName = $readMetadataMethodName;
         $this->canReadEventIdMethodName = $canReadEventIdMethodName;
         $this->readEventIdMethodName = $readEventIdMethodName;
+        $this->canReadEventVersionMethodName = $canReadEventVersionMethodName;
+        $this->readEventVersionMethodName = $readEventVersionMethodName;
         $this->supportedObjectType = $supportedObjectType;
     }
 
@@ -91,6 +107,26 @@ class PublicMethodsChangeReader implements ChangeReader
         $this->assertObjectIsSupported($change);
 
         return call_user_func([$change, $this->readEventIdMethodName]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function canReadEventVersion($change)
+    {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->canReadEventVersionMethodName]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readEventVersion($change)
+    {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->readEventVersionMethodName]);
     }
 
     private function assertObjectIsSupported($object)

@@ -22,6 +22,11 @@ class EventEnvelope
     private $event;
 
     /**
+     * @var int
+     */
+    private $version;
+
+    /**
      * @var Contract
      */
     private $metadataType;
@@ -35,12 +40,14 @@ class EventEnvelope
         Contract $eventType,
         $eventId,
         $event,
+        $version,
         $metadataType = null,
         $metadata = null
     ) {
         $this->eventType = $eventType;
         $this->eventId = $eventId;
         $this->event = $event;
+        $this->version = $version;
         $this->metadataType = $metadataType;
         $this->metadata = $metadata;
     }
@@ -67,6 +74,14 @@ class EventEnvelope
     public function getEvent()
     {
         return $this->event;
+    }
+
+    /**
+     * @return int
+     */
+    public function getVersion()
+    {
+        return $this->version;
     }
 
     /**
