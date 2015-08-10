@@ -46,9 +46,46 @@ class PropertiesReflectionSerializerTest extends TestCase
 
     public function provideRoundTripData()
     {
+        $complicated = new PropertiesReflectionSerializerFixture();
+        $complicated->setPrivateOuterValue('a');
+        $complicated->setPrivateExtendedValue('b');
+        $complicated->setPrivateTraitValue('c');
+
         return [
             [new AccountWasOpened('fixture-account-000', 25)],
             [new Post(PostId::fromString('first-post'))],
+            [$complicated],
         ];
+    }
+}
+
+trait PropertiesReflectionSerializerTrait
+{
+    private $privateTraitValue;
+    public function setPrivateTraitValue($privateTraitValue)
+    {
+        $this->privateTraitValue = $privateTraitValue;
+    }
+}
+
+class PropertiesReflectionSerializerExtended
+{
+    use PropertiesReflectionSerializerTrait;
+
+    private $privateExtendedValue;
+
+    public function setPrivateExtendedValue($privateExtendedValue)
+    {
+        $this->privateExtendedValue = $privateExtendedValue;
+    }
+}
+
+class PropertiesReflectionSerializerFixture extends PropertiesReflectionSerializerExtended
+{
+    private $privateOuterValue;
+
+    public function setPrivateOuterValue($privateOuterValue)
+    {
+        $this->privateOuterValue = $privateOuterValue;
     }
 }

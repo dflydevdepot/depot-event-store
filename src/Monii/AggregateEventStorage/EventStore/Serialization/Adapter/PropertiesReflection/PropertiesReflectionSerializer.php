@@ -38,9 +38,24 @@ class PropertiesReflectionSerializer implements Serializer
     public function serialize(Contract $type, $object)
     {
         $data = [];
+
         $reflectionClass = new \ReflectionClass($object);
 
+        $data = $this->addDataFromReflectionClass($data, $reflectionClass, $object);
+
+        return $data;
+    }
+
+    private function addDataFromReflectionClass(
+        array $data,
+        \ReflectionClass $reflectionClass,
+        $object
+    ) {
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+            if (array_key_exists($reflectionProperty->getName(), $data)) {
+                continue;
+            }
+
             $property = new ReflectionPropertyHelper($reflectionClass, $reflectionProperty);
 
             if ($property->isObject()) {
@@ -50,8 +65,17 @@ class PropertiesReflectionSerializer implements Serializer
             }
         }
 
+        if (false !== $parentClass = $reflectionClass->getParentClass()) {
+            $data = $this->addDataFromReflectionClass($data, $parentClass, $object);
+        }
+
+        foreach ($reflectionClass->getTraits() as $traitReflectionClass) {
+            $data = $this->addDataFromReflectionClass($data, $traitReflectionClass, $object);
+        }
+
         return $data;
     }
+
     /**
      * (@inheritdoc)
      */
@@ -69,7 +93,21 @@ class PropertiesReflectionSerializer implements Serializer
 
         $object = $reflectionClass->newInstanceWithoutConstructor();
 
+        $object = $this->setReflectionPropertiesFromData($data, $reflectionClass, $object);
+
+        return $object;
+    }
+
+    private function setReflectionPropertiesFromData(
+        array $data,
+        \ReflectionClass $reflectionClass,
+        $object
+    ) {
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+            if (! array_key_exists($reflectionProperty->getName(), $data)) {
+                continue;
+            }
+
             $property = new ReflectionPropertyHelper($reflectionClass, $reflectionProperty);
             if ($property->isObject()) {
                 $property->setValue($object, $this->subDeserialize(
@@ -79,6 +117,16 @@ class PropertiesReflectionSerializer implements Serializer
             } else {
                 $property->setValue($object, $data[$reflectionProperty->getName()]);
             }
+
+            unset($data[$reflectionProperty->getName()]);
+        }
+
+        if (false !== $parentClass = $reflectionClass->getParentClass()) {
+            $object = $this->setReflectionPropertiesFromData($data, $parentClass, $object);
+        }
+
+        foreach ($reflectionClass->getTraits() as $traitReflectionClass) {
+            $object = $this->setReflectionPropertiesFromData($data, $traitReflectionClass, $object);
         }
 
         return $object;
