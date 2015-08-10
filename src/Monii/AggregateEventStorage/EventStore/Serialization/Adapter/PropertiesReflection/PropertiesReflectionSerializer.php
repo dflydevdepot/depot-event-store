@@ -46,7 +46,7 @@ class PropertiesReflectionSerializer implements Serializer
         return $data;
     }
 
-    public function addDataFromReflectionClass(
+    private function addDataFromReflectionClass(
         array $data,
         \ReflectionClass $reflectionClass,
         $object
@@ -93,7 +93,21 @@ class PropertiesReflectionSerializer implements Serializer
 
         $object = $reflectionClass->newInstanceWithoutConstructor();
 
+        $object = $this->setReflectionPropertiesFromData($data, $reflectionClass, $object);
+
+        return $object;
+    }
+
+    private function setReflectionPropertiesFromData(
+        array $data,
+        \ReflectionClass $reflectionClass,
+        $object
+    ) {
         foreach ($reflectionClass->getProperties() as $reflectionProperty) {
+            if (! array_key_exists($reflectionProperty->getName(), $data)) {
+                continue;
+            }
+
             $property = new ReflectionPropertyHelper($reflectionClass, $reflectionProperty);
             if ($property->isObject()) {
                 $property->setValue($object, $this->subDeserialize(
@@ -103,6 +117,16 @@ class PropertiesReflectionSerializer implements Serializer
             } else {
                 $property->setValue($object, $data[$reflectionProperty->getName()]);
             }
+
+            unset($data[$reflectionProperty->getName()]);
+        }
+
+        if (false !== $parentClass = $reflectionClass->getParentClass()) {
+            $object = $this->setReflectionPropertiesFromData($data, $parentClass, $object);
+        }
+
+        foreach ($reflectionClass->getTraits() as $traitReflectionClass) {
+            $object = $this->setReflectionPropertiesFromData($data, $traitReflectionClass, $object);
         }
 
         return $object;
