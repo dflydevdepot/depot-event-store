@@ -15,7 +15,7 @@ use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\EventStore;
 use Monii\AggregateEventStorage\EventStore\Persistence\Adapter\InMemory\InMemoryPersistence;
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
-use Monii\Serialization\ReflectionPropertiesSerializer\ReflectionPropertiesSerializer;
+use Monii\AggregateEventStorage\EventStore\Serialization\Adapter\ReflectionProperties\ReflectionPropertiesSerializer;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitIdGenerator;
 use Monii\AggregateEventStorage\Fixtures\Banking\Account\Account;
@@ -37,6 +37,7 @@ class UnitOfWorkTest extends TestCase
         parent::setUp();
 
         $serializer = new ReflectionPropertiesSerializer(
+            new SimplePhpFqcnContractResolver()
         );
 
         $persistence = new InMemoryPersistence($serializer, $serializer);

@@ -4,7 +4,7 @@ namespace Monii\AggregateEventStorage\EventStore\Persistence\Adapter\InMemory;
 
 use Monii\AggregateEventStorage\Contract\SimplePhpFqcnContractResolver;
 use Monii\AggregateEventStorage\EventStore\Persistence\PersistenceTest;
-use Monii\Serialization\ReflectionPropertiesSerializer\ReflectionPropertiesSerializer;
+use Monii\AggregateEventStorage\EventStore\Serialization\Adapter\ReflectionProperties\ReflectionPropertiesSerializer;
 
 class InMemoryPersistenceTest extends PersistenceTest
 {
@@ -13,6 +13,7 @@ class InMemoryPersistenceTest extends PersistenceTest
     protected function createPersistence()
     {
         $serializer = new ReflectionPropertiesSerializer(
+            new SimplePhpFqcnContractResolver()
         );
 
         return $this->inMemoryPersistence = new InMemoryPersistence(
