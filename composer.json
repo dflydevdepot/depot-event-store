@@ -8,10 +8,13 @@
             "email": "beau@dflydev.com"
         }
     ],
-    "require": {},
+    "require": {
+        "monii/reflection-properties-serializer": "^0.0@dev"
+    },
     "autoload": {
         "psr-4": {
-            "Monii\\AggregateEventStorage\\": "src/Monii/AggregateEventStorage"
+            "Monii\\AggregateEventStorage\\": "src/Monii/AggregateEventStorage",
+            "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "vendor/monii/aggregate-reflection-properties-serializer/src/"
         }
     },
     "require-dev": {
@@ -23,6 +26,10 @@
         "monii-aggregate-event-storage-testing": {
             "type": "vcs",
             "url": "https://github.com/monii/monii-aggregate-event-storage-testing"
+        },
+        "monii-reflection-properties-serializer": {
+            "type": "vcs",
+            "url": "https://github.com/monii/monii-reflection-properties-serializer"
         }
     },
     "autoload-dev": {
