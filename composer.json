@@ -14,7 +14,7 @@
     "autoload": {
         "psr-4": {
             "Monii\\AggregateEventStorage\\": "src/Monii/AggregateEventStorage",
-            "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "vendor/monii/aggregate-reflection-properties-serializer/src/"
+            "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "vendor/monii/reflection-properties-serializer/src/Serialization/ReflectionPropertiesSerializer"
         }
     },
     "require-dev": {

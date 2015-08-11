@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "3831d1bd8a89b4e699ef96a3beadabd1",
+    "hash": "d2a82ed92d60a697fb87401a9c532968",
     "packages": [
         {
             "name": "monii/reflection-properties-serializer",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:monii/monii-reflection-properties-serializer.git",
-                "reference": "277d59d12840f7578a36e9da4b4396d4c906da90"
+                "reference": "ce15033466c4f1ea3c72aa92eb876f445a2e40e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/277d59d12840f7578a36e9da4b4396d4c906da90",
-                "reference": "277d59d12840f7578a36e9da4b4396d4c906da90",
+                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/ce15033466c4f1ea3c72aa92eb876f445a2e40e8",
+                "reference": "ce15033466c4f1ea3c72aa92eb876f445a2e40e8",
                 "shasum": ""
             },
             "require-dev": {
@@ -32,12 +32,12 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "src"
+                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "src/Serialization/ReflectionPropertiesSerializer"
                 }
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "tests/unit"
+                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "tests/unit/Serialization/ReflectionPropertiesSerializer"
                 }
             },
             "license": [
@@ -54,7 +54,7 @@
                 "source": "https://github.com/monii/monii-reflection-properties-serializer/tree/master",
                 "issues": "https://github.com/monii/monii-reflection-properties-serializer/issues"
             },
-            "time": "2015-08-11 08:48:56"
+            "time": "2015-08-11 09:55:56"
         }
     ],
     "packages-dev": [
