@@ -6,18 +6,18 @@ use Monii\AggregateEventStorage\Contract\Contract;
 use Monii\AggregateEventStorage\EventStore\EventEnvelope;
 use Monii\AggregateEventStorage\EventStore\Persistence\OptimisticConcurrencyFailed;
 use Monii\AggregateEventStorage\EventStore\Persistence\Persistence;
-use Monii\AggregateEventStorage\EventStore\Serialization\Serializer;
+use Monii\Serialization\ReflectionPropertiesSerializer\ReflectionPropertiesSerializer;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
 class InMemoryPersistence implements Persistence
 {
     /**
-     * @var Serializer
+     * @var ReflectionPropertiesSerializer
      */
     private $eventSerializer;
 
     /**
-     * @var Serializer
+     * @var ReflectionPropertiesSerializer
      */
     private $metadataSerializer;
 
@@ -27,8 +27,8 @@ class InMemoryPersistence implements Persistence
     private $records = [];
 
     public function __construct(
-        Serializer $eventSerializer,
-        Serializer $metadataSerializer
+        ReflectionPropertiesSerializer $eventSerializer,
+        ReflectionPropertiesSerializer $metadataSerializer
     ) {
         $this->eventSerializer = $eventSerializer;
         $this->metadataSerializer = $metadataSerializer;
