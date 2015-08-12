@@ -5,6 +5,7 @@ namespace Monii\AggregateEventStorage\EventStore\Serialization\Adapter\Reflectio
 use Monii\Serialization\ReflectionPropertiesSerializer\ReflectionPropertiesSerializer as MoniiReflectionPropertiesSerializer;
 use Monii\AggregateEventStorage\EventStore\Serialization\Serializer;
 use Monii\AggregateEventStorage\Contract\ContractResolver;
+use Monii\AggregateEventStorage\Contract\Contract;
 
 
 class ReflectionPropertiesSerializer implements Serializer
@@ -18,28 +19,30 @@ class ReflectionPropertiesSerializer implements Serializer
     }
 
     public function canSerialize(
+        Contract $type,
         $data
     ) {
         return true;
     }
 
     public function canDeserialize(
-        $type,
+        Contract $type,
         array $data
     ) {
         return true;
     }
 
     public function serialize(
+        Contract $type,
         $object
     ) {
         return $this->serializer->serialize($object);
     }
 
     public function deserialize(
-        $type,
+        Contract $type,
         array $data
     ) {
-        return $this->serializer->deserialize($type, $data);
+        return $this->serializer->deserialize($type->getClassName(), $data);
     }
 }
