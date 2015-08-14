@@ -4,21 +4,24 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d2a82ed92d60a697fb87401a9c532968",
+    "hash": "e237ce6728460b18d4e3d8218018c4d2",
     "packages": [
         {
             "name": "monii/reflection-properties-serializer",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:monii/monii-reflection-properties-serializer.git",
-                "reference": "ce15033466c4f1ea3c72aa92eb876f445a2e40e8"
+                "url": "https://github.com/monii/monii-reflection-properties-serializer.git",
+                "reference": "5c99314c015cf7512bf62397074eb7de9d09ed19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/ce15033466c4f1ea3c72aa92eb876f445a2e40e8",
-                "reference": "ce15033466c4f1ea3c72aa92eb876f445a2e40e8",
+                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/5c99314c015cf7512bf62397074eb7de9d09ed19",
+                "reference": "5c99314c015cf7512bf62397074eb7de9d09ed19",
                 "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.7",
@@ -32,14 +35,10 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "src/Serialization/ReflectionPropertiesSerializer"
+                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "src"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "tests/unit/Serialization/ReflectionPropertiesSerializer"
-                }
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -47,14 +46,27 @@
                 {
                     "name": "Beau Simensen",
                     "email": "beau@dflydev.com"
+                },
+                {
+                    "name": "monii.io",
+                    "email": "team@monii.com"
+                },
+                {
+                    "name": "Steve Marks",
+                    "email": "steve.marks@monii.com"
+                },
+                {
+                    "name": "Alec Charlton",
+                    "email": "alec.charlton@monii.com"
                 }
             ],
             "description": "Reflection Properties Serializer",
-            "support": {
-                "source": "https://github.com/monii/monii-reflection-properties-serializer/tree/master",
-                "issues": "https://github.com/monii/monii-reflection-properties-serializer/issues"
-            },
-            "time": "2015-08-11 09:55:56"
+            "keywords": [
+                "properties",
+                "reflection",
+                "serializer"
+            ],
+            "time": "2015-08-13 15:32:20"
         }
     ],
     "packages-dev": [
