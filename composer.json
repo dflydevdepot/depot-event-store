@@ -25,10 +25,6 @@
         "monii-aggregate-event-storage-testing": {
             "type": "vcs",
             "url": "https://github.com/monii/monii-aggregate-event-storage-testing"
-        },
-        "monii-reflection-properties-serializer": {
-            "type": "vcs",
-            "url": "https://github.com/monii/monii-reflection-properties-serializer"
         }
     },
     "autoload-dev": {
