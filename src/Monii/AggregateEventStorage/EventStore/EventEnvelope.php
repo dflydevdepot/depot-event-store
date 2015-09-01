@@ -47,17 +47,17 @@ class EventEnvelope
         $eventId,
         $event,
         $version,
+        $when,
         $metadataType = null,
-        $metadata = null,
-        $when = null
+        $metadata = null
     ) {
         $this->eventType = $eventType;
         $this->eventId = $eventId;
         $this->event = $event;
         $this->version = $version;
+        $this->when = (is_null($when)) ? new DateTimeImmutable('now') : $when;
         $this->metadataType = $metadataType;
         $this->metadata = $metadata;
-        $this->when = (is_null($when)) ? new DateTimeImmutable('now') : $when;
     }
 
     /**
