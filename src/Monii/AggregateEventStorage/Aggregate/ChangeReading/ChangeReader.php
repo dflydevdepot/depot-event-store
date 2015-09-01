@@ -2,6 +2,8 @@
 
 namespace Monii\AggregateEventStorage\Aggregate\ChangeReading;
 
+use DateTimeImmutable;
+
 interface ChangeReader
 {
     /**
@@ -45,4 +47,11 @@ interface ChangeReader
      * @return int|null
      */
     public function readEventVersion($change);
+
+    /**
+     * @param object $change
+     *
+     * @return DateTimeImmutable
+     */
+    public function readWhen($change);
 }

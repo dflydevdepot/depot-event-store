@@ -33,4 +33,9 @@ class ChangeIsEventReader implements ChangeReader
     {
         return null;
     }
+
+    public function readWhen($change)
+    {
+        return null;
+    }
 }

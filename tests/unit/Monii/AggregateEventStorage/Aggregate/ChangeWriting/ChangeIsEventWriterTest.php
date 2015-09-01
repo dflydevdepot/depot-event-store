@@ -12,6 +12,6 @@ class ChangeIsEventWriterTest extends TestCase
         $eventId = 0;
         $passthrough = new ChangeIsEventWriter;
 
-        $this->assertEquals($original_event, $passthrough->writeChange($eventId, $original_event));
+        $this->assertEquals($original_event, $passthrough->writeChange($eventId, $original_event, new DateTimeImmutable('now')));
     }
 }

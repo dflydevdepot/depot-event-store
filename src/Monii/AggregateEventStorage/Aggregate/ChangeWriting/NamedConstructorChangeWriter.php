@@ -27,7 +27,7 @@ class NamedConstructorChangeWriter implements ChangeWriter
     /**
      * {@inheritdoc}
      */
-    public function writeChange($eventId, $event, $metadata = null)
+    public function writeChange($eventId, $event, $when, $metadata = null)
     {
         $this->assertStaticMethodCallExists();
 
