@@ -33,4 +33,9 @@ interface AggregateChangeReading
      * @return object
      */
     public function getAggregateEventVersion();
+
+    /**
+     * @return object
+     */
+    public function getAggregateEventWhen();
 }
