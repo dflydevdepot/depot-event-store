@@ -64,7 +64,7 @@ class PublicMethodsChangeReader implements ChangeReader
         $readEventIdMethodName = 'getAggregateEventId',
         $canReadEventVersionMethodName = 'getAggregateEventVersion',
         $readEventVersionMethodName = 'getAggregateEventVersion',
-        $readWhenMethodName = 'getAggregateWhen',
+        $readWhenMethodName = 'getAggregateEventWhen',
         $supportedObjectType = AggregateChangeReading::class
     ) {
         $this->readEventMethodName = $readEventMethodName;
