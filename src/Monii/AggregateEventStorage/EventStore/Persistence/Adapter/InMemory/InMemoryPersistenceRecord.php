@@ -2,6 +2,7 @@
 
 namespace Monii\AggregateEventStorage\EventStore\Persistence\Adapter\InMemory;
 
+use DateTimeImmutable;
 use Monii\AggregateEventStorage\Contract\Contract;
 use Monii\AggregateEventStorage\EventStore\Transaction\CommitId;
 
@@ -51,6 +52,11 @@ class InMemoryPersistenceRecord
      * @var int
      */
     public $version;
+
+    /**
+     * @var DateTimeImmutable
+     */
+    public $when;
 
     /**
      * @var Contract|null

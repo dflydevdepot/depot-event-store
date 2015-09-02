@@ -190,7 +190,7 @@ class UnitOfWorkTest extends TestCase
             $eventId,
             $event,
             $version,
-            !is_null($when) ? $when : new DateTimeImmutable('2016-01-01 14:55:00')
+            $when ?: new DateTimeImmutable('2016-01-01 14:55:00')
         );
     }
 
@@ -199,8 +199,8 @@ class UnitOfWorkTest extends TestCase
         return BankingEventEnvelope::create(
             $eventId,
             $event,
-            $metadata,
-            !is_null($when) ? $when : new DateTimeImmutable('2016-01-01 14:55:00')
+            $when ?: new DateTimeImmutable('2016-01-01 14:55:00'),
+            $metadata
         );
     }
 
