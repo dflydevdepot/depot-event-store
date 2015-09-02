@@ -47,7 +47,7 @@ class EventEnvelope
         $eventId,
         $event,
         $version,
-        $when,
+        $when = null,
         $metadataType = null,
         $metadata = null
     ) {
