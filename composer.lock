@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e237ce6728460b18d4e3d8218018c4d2",
+    "hash": "00e43b4a04f3da5f5e106a6fa0ff01e2",
     "packages": [
         {
             "name": "monii/reflection-properties-serializer",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/monii/monii-reflection-properties-serializer.git",
-                "reference": "30e1b50f6ef528fdc10d6bc468114e55f76f05fb"
+                "reference": "1ec43ee64ae4715265e6612f72639d9f8964734b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/30e1b50f6ef528fdc10d6bc468114e55f76f05fb",
-                "reference": "30e1b50f6ef528fdc10d6bc468114e55f76f05fb",
+                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/1ec43ee64ae4715265e6612f72639d9f8964734b",
+                "reference": "1ec43ee64ae4715265e6612f72639d9f8964734b",
                 "shasum": ""
             },
             "require": {
@@ -66,7 +66,7 @@
                 "reflection",
                 "serializer"
             ],
-            "time": "2015-08-29 03:04:16"
+            "time": "2015-09-02 12:58:47"
         }
     ],
     "packages-dev": [
