@@ -2,6 +2,7 @@
 
 namespace Monii\AggregateEventStorage\Aggregate;
 
+use DateTimeImmutable;
 use Monii\AggregateEventStorage\Aggregate\ChangeReading\PublicMethodsChangeReader;
 use Monii\AggregateEventStorage\Aggregate\ChangesClearing\PublicMethodChangesClearor;
 use Monii\AggregateEventStorage\Aggregate\ChangesExtraction\PublicMethodChangesExtractor;
@@ -182,21 +183,23 @@ class UnitOfWorkTest extends TestCase
     }
 
 
-    protected function createEventEnvelope($eventId, $event, $version)
+    protected function createEventEnvelope($eventId, $event, $version, $when = null)
     {
         return new EventEnvelope(
             (new SimplePhpFqcnContractResolver())->resolveFromObject($event),
             $eventId,
             $event,
-            $version
+            $version,
+            $when ?: new DateTimeImmutable('2016-01-01 14:55:00')
         );
     }
 
-    protected function createBankingEventEnvelope($eventId, $event, $metadata = null)
+    protected function createBankingEventEnvelope($eventId, $event, $metadata = null, $when = null)
     {
         return BankingEventEnvelope::create(
             $eventId,
             $event,
+            $when ?: new DateTimeImmutable('2016-01-01 14:55:00'),
             $metadata
         );
     }

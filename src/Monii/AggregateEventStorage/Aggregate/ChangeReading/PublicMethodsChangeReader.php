@@ -40,6 +40,11 @@ class PublicMethodsChangeReader implements ChangeReader
     /**
      * @var string
      */
+    private $readWhenMethodName;
+
+    /**
+     * @var string
+     */
     private $supportedObjectType;
 
     /**
@@ -49,6 +54,7 @@ class PublicMethodsChangeReader implements ChangeReader
      * @param string $readEventIdMethodName
      * @param string $canReadEventVersionMethodName
      * @param string $readEventVersionMethodName
+     * @param string $readWhenMethodName
      * @param $supportedObjectType
      */
     public function __construct(
@@ -58,6 +64,7 @@ class PublicMethodsChangeReader implements ChangeReader
         $readEventIdMethodName = 'getAggregateEventId',
         $canReadEventVersionMethodName = 'getAggregateEventVersion',
         $readEventVersionMethodName = 'getAggregateEventVersion',
+        $readWhenMethodName = 'getAggregateEventWhen',
         $supportedObjectType = AggregateChangeReading::class
     ) {
         $this->readEventMethodName = $readEventMethodName;
@@ -66,6 +73,7 @@ class PublicMethodsChangeReader implements ChangeReader
         $this->readEventIdMethodName = $readEventIdMethodName;
         $this->canReadEventVersionMethodName = $canReadEventVersionMethodName;
         $this->readEventVersionMethodName = $readEventVersionMethodName;
+        $this->readWhenMethodName = $readWhenMethodName;
         $this->supportedObjectType = $supportedObjectType;
     }
 
@@ -127,6 +135,16 @@ class PublicMethodsChangeReader implements ChangeReader
         $this->assertObjectIsSupported($change);
 
         return call_user_func([$change, $this->readEventVersionMethodName]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function readWhen($change)
+    {
+        $this->assertObjectIsSupported($change);
+
+        return call_user_func([$change, $this->readWhenMethodName]);
     }
 
     private function assertObjectIsSupported($object)

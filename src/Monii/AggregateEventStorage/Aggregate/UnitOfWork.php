@@ -137,12 +137,14 @@ class UnitOfWork
                 ? $this->aggregateChangeManipulator->readEventVersion($change)
                 : $aggregateVersion
             ;
+            $when = $this->aggregateChangeManipulator->readWhen($change);
 
             $eventEnvelopes[] = new EventEnvelope(
                 $this->eventContractResolver->resolveFromObject($event),
                 $eventId,
                 $event,
                 $version,
+                $when,
                 $this->metadataContractResolver->resolveFromObject($metadata),
                 $metadata
             );
@@ -232,7 +234,9 @@ class UnitOfWork
             return $this->aggregateChangeManipulator->writeChange(
                 $eventEnvelope->getEventId(),
                 $eventEnvelope->getEvent(),
-                $eventEnvelope->getMetadata()
+                $eventEnvelope->getWhen(),
+                $eventEnvelope->getMetadata(),
+                $eventEnvelope->getVersion()
             );
         }, $eventStream->all());
 

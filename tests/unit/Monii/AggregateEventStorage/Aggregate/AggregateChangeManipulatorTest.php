@@ -26,11 +26,13 @@ class AggregateChangeManipulatorTest extends TestCase
 
     protected function getAccountFixtureBankingEventEnvelopes()
     {
+        $now = new \DateTimeImmutable('now');
+
         return [
-            BankingEventEnvelope::create(0, new AccountWasOpened('fixture-account-000', 25),'metaData'),
-            BankingEventEnvelope::create(1, new AccountBalanceIncreased('fixture-account-000', 3)),
-            BankingEventEnvelope::create(2, new AccountBalanceDecreased('fixture-account-000', 2)),
-            BankingEventEnvelope::create(3, new AccountBalanceIncreased('fixture-account-000', 5)),
+            BankingEventEnvelope::create(0, new AccountWasOpened('fixture-account-000', 25), null, 'metaData'),
+            BankingEventEnvelope::create(1, new AccountBalanceIncreased('fixture-account-000', null, 3)),
+            BankingEventEnvelope::create(2, new AccountBalanceDecreased('fixture-account-000', null, 2)),
+            BankingEventEnvelope::create(3, new AccountBalanceIncreased('fixture-account-000', null, 5)),
         ];
     }
 

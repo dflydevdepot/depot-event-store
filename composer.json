@@ -27,11 +27,6 @@
             "url": "https://github.com/monii/monii-aggregate-event-storage-testing"
         }
     },
-    "autoload-dev": {
-        "psr-4": {
-            "Monii\\AggregateEventStorage\\": "vendor/monii/aggregate-event-storage-testing/src/unit/Monii/AggregateEventStorage"
-        }
-    },
     "extra": {
         "branch-alias": {
             "dev-master": "0.0.x-dev"

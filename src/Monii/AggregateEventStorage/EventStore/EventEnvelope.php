@@ -2,6 +2,7 @@
 
 namespace Monii\AggregateEventStorage\EventStore;
 
+use DateTimeImmutable;
 use Monii\AggregateEventStorage\Contract\Contract;
 
 class EventEnvelope
@@ -36,11 +37,17 @@ class EventEnvelope
      */
     private $metadata;
 
+    /**
+     * @var DateTimeImmutable
+     */
+    private $when;
+
     public function __construct(
         Contract $eventType,
         $eventId,
         $event,
         $version,
+        $when = null,
         $metadataType = null,
         $metadata = null
     ) {
@@ -48,6 +55,7 @@ class EventEnvelope
         $this->eventId = $eventId;
         $this->event = $event;
         $this->version = $version;
+        $this->when = $when ?: new DateTimeImmutable('now');
         $this->metadataType = $metadataType;
         $this->metadata = $metadata;
     }
@@ -98,5 +106,13 @@ class EventEnvelope
     public function getMetadata()
     {
         return $this->metadata;
+    }
+
+    /**
+     * @return DateTimeImmutable
+     */
+    public function getWhen()
+    {
+        return $this->when;
     }
 }
