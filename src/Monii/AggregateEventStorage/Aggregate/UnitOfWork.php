@@ -120,45 +120,44 @@ class UnitOfWork
 
         $changes = $this->aggregateManipulator->extractChanges($aggregate);
 
-        $initialAggregateVersion = $this->aggregateManipulator->readVersion($aggregate) - count($changes);
-        $aggregateVersion = $initialAggregateVersion;
+        if (!empty($changes)) {
+            $initialAggregateVersion = $this->aggregateManipulator->readVersion($aggregate) - count($changes);
+            $aggregateVersion = $initialAggregateVersion;
 
-        $eventEnvelopes = [];
-        foreach ($changes as $change) {
-            $aggregateVersion++;
+            $eventEnvelopes = [];
+            foreach ($changes as $change) {
+                $aggregateVersion++;
 
-            $eventId = $this->aggregateChangeManipulator->canReadEventId($change)
-                ? $this->aggregateChangeManipulator->readEventId($change)
-                : $this->eventIdGenerator->generateEventId()
-            ;
-            $event = $this->aggregateChangeManipulator->readEvent($change);
-            $metadata = $this->aggregateChangeManipulator->readMetadata($change);
-            $version = $this->aggregateChangeManipulator->canReadEventVersion($change)
-                ? $this->aggregateChangeManipulator->readEventVersion($change)
-                : $aggregateVersion
-            ;
-            $when = $this->aggregateChangeManipulator->readWhen($change);
+                $eventId = $this->aggregateChangeManipulator->canReadEventId($change)
+                    ? $this->aggregateChangeManipulator->readEventId($change)
+                    : $this->eventIdGenerator->generateEventId();
+                $event = $this->aggregateChangeManipulator->readEvent($change);
+                $metadata = $this->aggregateChangeManipulator->readMetadata($change);
+                $version = $this->aggregateChangeManipulator->canReadEventVersion($change)
+                    ? $this->aggregateChangeManipulator->readEventVersion($change)
+                    : $aggregateVersion;
+                $when = $this->aggregateChangeManipulator->readWhen($change);
 
-            $eventEnvelopes[] = new EventEnvelope(
-                $this->eventContractResolver->resolveFromObject($event),
-                $eventId,
-                $event,
-                $version,
-                $when,
-                $this->metadataContractResolver->resolveFromObject($metadata),
-                $metadata
-            );
+                $eventEnvelopes[] = new EventEnvelope(
+                    $this->eventContractResolver->resolveFromObject($event),
+                    $eventId,
+                    $event,
+                    $version,
+                    $when,
+                    $this->metadataContractResolver->resolveFromObject($metadata),
+                    $metadata
+                );
+            }
+
+            $eventStream = $initialAggregateVersion === -1
+                ? $this->eventStore->create($aggregateType, $aggregateId)
+                : $this->eventStore->open($aggregateType, $aggregateId);
+
+            $eventStream->appendAll($eventEnvelopes);
+            $eventStream->commit($this->commitIdGenerator->generateCommitId());
+
+            $this->aggregateManipulator->clearChanges($aggregate);
         }
-
-        $eventStream = $initialAggregateVersion === -1
-            ? $this->eventStore->create($aggregateType, $aggregateId)
-            : $this->eventStore->open($aggregateType, $aggregateId)
-        ;
-
-        $eventStream->appendAll($eventEnvelopes);
-        $eventStream->commit($this->commitIdGenerator->generateCommitId());
-
-        $this->aggregateManipulator->clearChanges($aggregate);
     }
 
     /**
