@@ -120,8 +120,10 @@ class UnitOfWork
 
         $changes = $this->aggregateManipulator->extractChanges($aggregate);
 
-        if (empty($changes)) { return; }
-        
+        if (empty($changes)) {
+            return;
+        }
+
         $initialAggregateVersion = $this->aggregateManipulator->readVersion($aggregate) - count($changes);
         $aggregateVersion = $initialAggregateVersion;
 
