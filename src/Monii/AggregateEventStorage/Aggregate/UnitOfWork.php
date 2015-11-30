@@ -120,6 +120,10 @@ class UnitOfWork
 
         $changes = $this->aggregateManipulator->extractChanges($aggregate);
 
+        if (empty($changes)) {
+            return;
+        }
+
         $initialAggregateVersion = $this->aggregateManipulator->readVersion($aggregate) - count($changes);
         $aggregateVersion = $initialAggregateVersion;
 
@@ -129,14 +133,12 @@ class UnitOfWork
 
             $eventId = $this->aggregateChangeManipulator->canReadEventId($change)
                 ? $this->aggregateChangeManipulator->readEventId($change)
-                : $this->eventIdGenerator->generateEventId()
-            ;
+                : $this->eventIdGenerator->generateEventId();
             $event = $this->aggregateChangeManipulator->readEvent($change);
             $metadata = $this->aggregateChangeManipulator->readMetadata($change);
             $version = $this->aggregateChangeManipulator->canReadEventVersion($change)
                 ? $this->aggregateChangeManipulator->readEventVersion($change)
-                : $aggregateVersion
-            ;
+                : $aggregateVersion;
             $when = $this->aggregateChangeManipulator->readWhen($change);
 
             $eventEnvelopes[] = new EventEnvelope(
@@ -152,8 +154,7 @@ class UnitOfWork
 
         $eventStream = $initialAggregateVersion === -1
             ? $this->eventStore->create($aggregateType, $aggregateId)
-            : $this->eventStore->open($aggregateType, $aggregateId)
-        ;
+            : $this->eventStore->open($aggregateType, $aggregateId);
 
         $eventStream->appendAll($eventEnvelopes);
         $eventStream->commit($this->commitIdGenerator->generateCommitId());
