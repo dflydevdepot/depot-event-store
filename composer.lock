@@ -4,24 +4,22 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "00e43b4a04f3da5f5e106a6fa0ff01e2",
+    "hash": "dc014ba8e0568f4b4f49791655fffc97",
+    "content-hash": "39d433d5035fc609a04489f316c217c8",
     "packages": [
         {
-            "name": "monii/reflection-properties-serializer",
+            "name": "depot/contract",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/monii/monii-reflection-properties-serializer.git",
-                "reference": "1ec43ee64ae4715265e6612f72639d9f8964734b"
+                "url": "https://github.com/depot/depot-contract.git",
+                "reference": "e6fb0f9bb8cafae543a622c40df68205c5fcd8b3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/1ec43ee64ae4715265e6612f72639d9f8964734b",
-                "reference": "1ec43ee64ae4715265e6612f72639d9f8964734b",
+                "url": "https://api.github.com/repos/depot/depot-contract/zipball/e6fb0f9bb8cafae543a622c40df68205c5fcd8b3",
+                "reference": "e6fb0f9bb8cafae543a622c40df68205c5fcd8b3",
                 "shasum": ""
-            },
-            "require": {
-                "php": ">=5.5"
             },
             "require-dev": {
                 "phpunit/phpunit": "^4.7",
@@ -35,7 +33,7 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "src"
+                    "Depot\\Contract\\": "src"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -43,10 +41,6 @@
                 "MIT"
             ],
             "authors": [
-                {
-                    "name": "Beau Simensen",
-                    "email": "beau@dflydev.com"
-                },
                 {
                     "name": "monii.io",
                     "email": "team@monii.com"
@@ -58,18 +52,186 @@
                 {
                     "name": "Alec Charlton",
                     "email": "alec.charlton@monii.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau.simensen@monii.com"
                 }
             ],
-            "description": "Reflection Properties Serializer",
-            "keywords": [
-                "properties",
-                "reflection",
-                "serializer"
-            ],
-            "time": "2015-09-02 12:58:47"
+            "description": "Depot Contracts",
+            "homepage": "http://depot.io",
+            "time": "2015-12-01 04:46:38"
         }
     ],
     "packages-dev": [
+        {
+            "name": "depot/monii-reflection-properties-serializer-event-store-serialization",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/depot/depot-monii-reflection-properties-serializer-event-store-serialization.git",
+                "reference": "34190bcc62b8676338199d79b4c62699a8009779"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/depot/depot-monii-reflection-properties-serializer-event-store-serialization/zipball/34190bcc62b8676338199d79b4c62699a8009779",
+                "reference": "34190bcc62b8676338199d79b4c62699a8009779",
+                "shasum": ""
+            },
+            "require": {
+                "depot/contract": "^0.0@dev",
+                "depot/event-store": "^0.0@dev",
+                "monii/reflection-properties-serializer": "^0.0@dev"
+            },
+            "require-dev": {
+                "depot/testing-fixtures": "^0.0@dev",
+                "phpunit/phpunit": "^4.7",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Depot\\EventStore\\Serialization\\Adapter\\MoniiReflectionPropertiesSerializer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "monii.io",
+                    "email": "team@monii.com"
+                },
+                {
+                    "name": "Steve Marks",
+                    "email": "steve.marks@monii.com"
+                },
+                {
+                    "name": "Alec Charlton",
+                    "email": "alec.charlton@monii.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau.simensen@monii.com"
+                }
+            ],
+            "description": "Depot Event Store Serialization using Monii's Reflection Properties Serializer",
+            "homepage": "http://depot.io",
+            "time": "2015-12-01 05:24:55"
+        },
+        {
+            "name": "depot/testing-event-store-persistence",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/depot/depot-testing-event-store-persistence.git",
+                "reference": "dcf09b660b88c323e945663ab22c451c8b0c4537"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/dcf09b660b88c323e945663ab22c451c8b0c4537",
+                "reference": "dcf09b660b88c323e945663ab22c451c8b0c4537",
+                "shasum": ""
+            },
+            "require": {
+                "depot/contract": "^0.0@dev",
+                "depot/event-store": "^0.0@dev",
+                "depot/testing-fixtures": "^0.0@dev"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Depot\\Testing\\EventStore\\Persistence\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "monii.io",
+                    "email": "team@monii.com"
+                },
+                {
+                    "name": "Steve Marks",
+                    "email": "steve.marks@monii.com"
+                },
+                {
+                    "name": "Alec Charlton",
+                    "email": "alec.charlton@monii.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau.simensen@monii.com"
+                }
+            ],
+            "description": "Testing support for Depot Event Store Persistence implementations",
+            "homepage": "http://depot.io",
+            "time": "2015-12-01 05:29:28"
+        },
+        {
+            "name": "depot/testing-fixtures",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/depot/depot-testing-fixtures.git",
+                "reference": "387178b1b95010232e412df2ab45e33bfa8d382f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/depot/depot-testing-fixtures/zipball/387178b1b95010232e412df2ab45e33bfa8d382f",
+                "reference": "387178b1b95010232e412df2ab45e33bfa8d382f",
+                "shasum": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "0.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Depot\\Testing\\Fixtures\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "monii.io",
+                    "email": "team@monii.com"
+                },
+                {
+                    "name": "Steve Marks",
+                    "email": "steve.marks@monii.com"
+                },
+                {
+                    "name": "Alec Charlton",
+                    "email": "alec.charlton@monii.com"
+                },
+                {
+                    "name": "Beau Simensen",
+                    "email": "beau.simensen@monii.com"
+                }
+            ],
+            "description": "Testing Fixtures for Depot",
+            "homepage": "http://depot.io",
+            "time": "2015-12-01 04:00:03"
+        },
         {
             "name": "doctrine/instantiator",
             "version": "1.0.5",
@@ -125,22 +287,23 @@
             "time": "2015-06-14 21:17:01"
         },
         {
-            "name": "monii/aggregate-event-storage-testing",
+            "name": "monii/reflection-properties-serializer",
             "version": "dev-master",
             "source": {
                 "type": "git",
-                "url": "git@github.com:monii/monii-aggregate-event-storage-testing.git",
-                "reference": "c6d213d8f337e0754635ac313ada46c32192406d"
+                "url": "https://github.com/monii/monii-reflection-properties-serializer.git",
+                "reference": "2713cfdbc087b18ab8d586de126bedf538532010"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-aggregate-event-storage-testing/zipball/c6d213d8f337e0754635ac313ada46c32192406d",
-                "reference": "c6d213d8f337e0754635ac313ada46c32192406d",
+                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/2713cfdbc087b18ab8d586de126bedf538532010",
+                "reference": "2713cfdbc087b18ab8d586de126bedf538532010",
                 "shasum": ""
             },
+            "require": {
+                "php": ">=5.5"
+            },
             "require-dev": {
-                "monii/aggregate-event-storage": "^0.0@dev",
-                "monii/reflection-properties-serializer": "@dev",
                 "phpunit/phpunit": "^4.7",
                 "squizlabs/php_codesniffer": "^2.3"
             },
@@ -152,9 +315,10 @@
             },
             "autoload": {
                 "psr-4": {
-                    "Monii\\AggregateEventStorage\\": "src/Monii/AggregateEventStorage"
+                    "Monii\\Serialization\\ReflectionPropertiesSerializer\\": "src"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
@@ -162,14 +326,27 @@
                 {
                     "name": "Beau Simensen",
                     "email": "beau@dflydev.com"
+                },
+                {
+                    "name": "monii.io",
+                    "email": "team@monii.com"
+                },
+                {
+                    "name": "Steve Marks",
+                    "email": "steve.marks@monii.com"
+                },
+                {
+                    "name": "Alec Charlton",
+                    "email": "alec.charlton@monii.com"
                 }
             ],
-            "description": "Monii's Aggregate Event Storage Tests",
-            "support": {
-                "source": "https://github.com/monii/monii-aggregate-event-storage-testing/tree/master",
-                "issues": "https://github.com/monii/monii-aggregate-event-storage-testing/issues"
-            },
-            "time": "2015-09-02 14:42:52"
+            "description": "Reflection Properties Serializer",
+            "keywords": [
+                "properties",
+                "reflection",
+                "serializer"
+            ],
+            "time": "2015-11-30 17:45:40"
         },
         {
             "name": "phpdocumentor/reflection-docblock",
@@ -282,16 +459,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "2.2.2",
+            "version": "2.2.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "2d7c03c0e4e080901b8f33b2897b0577be18a13c"
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/2d7c03c0e4e080901b8f33b2897b0577be18a13c",
-                "reference": "2d7c03c0e4e080901b8f33b2897b0577be18a13c",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/eabf68b476ac7d0f73793aada060f1c1a9bf8979",
+                "reference": "eabf68b476ac7d0f73793aada060f1c1a9bf8979",
                 "shasum": ""
             },
             "require": {
@@ -340,7 +517,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-08-04 03:42:39"
+            "time": "2015-10-06 15:47:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -473,16 +650,16 @@
         },
         {
             "name": "phpunit/php-token-stream",
-            "version": "1.4.6",
+            "version": "1.4.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-token-stream.git",
-                "reference": "3ab72c62e550370a6cd5dc873e1a04ab57562f5b"
+                "reference": "3144ae21711fb6cac0b1ab4cbe63b75ce3d4e8da"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/3ab72c62e550370a6cd5dc873e1a04ab57562f5b",
-                "reference": "3ab72c62e550370a6cd5dc873e1a04ab57562f5b",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-token-stream/zipball/3144ae21711fb6cac0b1ab4cbe63b75ce3d4e8da",
+                "reference": "3144ae21711fb6cac0b1ab4cbe63b75ce3d4e8da",
                 "shasum": ""
             },
             "require": {
@@ -518,20 +695,20 @@
             "keywords": [
                 "tokenizer"
             ],
-            "time": "2015-08-16 08:51:00"
+            "time": "2015-09-15 10:49:45"
         },
         {
             "name": "phpunit/phpunit",
-            "version": "4.8.6",
+            "version": "4.8.19",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "2246830f4a1a551c67933e4171bf2126dc29d357"
+                "reference": "b2caaf8947aba5e002d42126723e9d69795f32b4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/2246830f4a1a551c67933e4171bf2126dc29d357",
-                "reference": "2246830f4a1a551c67933e4171bf2126dc29d357",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/b2caaf8947aba5e002d42126723e9d69795f32b4",
+                "reference": "b2caaf8947aba5e002d42126723e9d69795f32b4",
                 "shasum": ""
             },
             "require": {
@@ -590,20 +767,20 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2015-08-24 04:09:38"
+            "time": "2015-11-30 08:18:59"
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "2.3.7",
+            "version": "2.3.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a"
+                "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/5e2645ad49d196e020b85598d7c97e482725786a",
-                "reference": "5e2645ad49d196e020b85598d7c97e482725786a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/ac8e7a3db35738d56ee9a76e78a4e03d97628983",
+                "reference": "ac8e7a3db35738d56ee9a76e78a4e03d97628983",
                 "shasum": ""
             },
             "require": {
@@ -646,7 +823,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2015-08-19 09:14:08"
+            "time": "2015-10-02 06:51:40"
         },
         {
             "name": "sebastian/comparator",
@@ -882,16 +1059,16 @@
         },
         {
             "name": "sebastian/global-state",
-            "version": "1.0.0",
+            "version": "1.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/global-state.git",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01"
+                "reference": "bc37d50fea7d017d3d340f230811c9f1d7280af4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
-                "reference": "c7428acdb62ece0a45e6306f1ae85e1c05b09c01",
+                "url": "https://api.github.com/repos/sebastianbergmann/global-state/zipball/bc37d50fea7d017d3d340f230811c9f1d7280af4",
+                "reference": "bc37d50fea7d017d3d340f230811c9f1d7280af4",
                 "shasum": ""
             },
             "require": {
@@ -929,7 +1106,7 @@
             "keywords": [
                 "global state"
             ],
-            "time": "2014-10-06 09:23:50"
+            "time": "2015-10-12 03:26:01"
         },
         {
             "name": "sebastian/recursion-context",
@@ -1021,16 +1198,16 @@
         },
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.3.3",
+            "version": "2.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "c1a26c729508f73560c1a4f767f60b8ab6b4a666"
+                "reference": "32a879f4f35019d78d568db2885d7779ca084a33"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/c1a26c729508f73560c1a4f767f60b8ab6b4a666",
-                "reference": "c1a26c729508f73560c1a4f767f60b8ab6b4a666",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/32a879f4f35019d78d568db2885d7779ca084a33",
+                "reference": "32a879f4f35019d78d568db2885d7779ca084a33",
                 "shasum": ""
             },
             "require": {
@@ -1091,38 +1268,38 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2015-06-24 03:16:23"
+            "time": "2015-11-23 21:30:59"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.7.3",
+            "version": "v3.0.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Yaml.git",
-                "reference": "71340e996171474a53f3d29111d046be4ad8a0ff"
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/71340e996171474a53f3d29111d046be4ad8a0ff",
-                "reference": "71340e996171474a53f3d29111d046be4ad8a0ff",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002",
+                "reference": "177a015cb0e19ff4a49e0e2e2c5fc1c1bee07002",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9"
-            },
-            "require-dev": {
-                "symfony/phpunit-bridge": "~2.7"
+                "php": ">=5.5.9"
             },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.7-dev"
+                    "dev-master": "3.0-dev"
                 }
             },
             "autoload": {
                 "psr-4": {
                     "Symfony\\Component\\Yaml\\": ""
-                }
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -1140,14 +1317,17 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2015-07-28 14:07:07"
+            "time": "2015-11-30 12:36:17"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "monii/reflection-properties-serializer": 20,
-        "monii/aggregate-event-storage-testing": 20
+        "depot/contract": 20,
+        "depot/monii-reflection-properties-serializer-event-store-serialization": 20,
+        "depot/testing-fixtures": 20,
+        "depot/testing-event-store-persistence": 20,
+        "monii/reflection-properties-serializer": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
