@@ -109,6 +109,18 @@ class EventEnvelope
     }
 
     /**
+     * @param null $metadata
+     * @return static
+     */
+    public function withMetadata($metadata = null)
+    {
+        $clone = clone($this);
+        $clone->metadata = $metadata;
+
+        return $clone;
+    }
+
+    /**
      * @return DateTimeImmutable
      */
     public function getWhen()
