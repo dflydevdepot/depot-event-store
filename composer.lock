@@ -4,8 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc014ba8e0568f4b4f49791655fffc97",
-    "content-hash": "39d433d5035fc609a04489f316c217c8",
+    "hash": "5bf18754d548951fa87db7243f8c1c2f",
     "packages": [
         {
             "name": "depot/contract",
@@ -74,7 +73,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/depot/depot-monii-reflection-properties-serializer-event-store-serialization/zipball/34190bcc62b8676338199d79b4c62699a8009779",
+                "url": "https://api.github.com/repos/depot/depot-monii-reflection-properties-serializer-event-store-serialization/zipball/077f43242294d2c21e5ec796fd6c42c6f9f9ce0e",
                 "reference": "34190bcc62b8676338199d79b4c62699a8009779",
                 "shasum": ""
             },
@@ -131,12 +130,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/depot/depot-testing-event-store-persistence.git",
-                "reference": "dcf09b660b88c323e945663ab22c451c8b0c4537"
+                "reference": "8b3cf513721fac6dc1b73d0dabf0d77009947820"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/dcf09b660b88c323e945663ab22c451c8b0c4537",
-                "reference": "dcf09b660b88c323e945663ab22c451c8b0c4537",
+                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/8b3cf513721fac6dc1b73d0dabf0d77009947820",
+                "reference": "8b3cf513721fac6dc1b73d0dabf0d77009947820",
                 "shasum": ""
             },
             "require": {
@@ -179,7 +178,7 @@
             ],
             "description": "Testing support for Depot Event Store Persistence implementations",
             "homepage": "http://depot.io",
-            "time": "2015-12-01 05:29:28"
+            "time": "2016-01-19 15:43:03"
         },
         {
             "name": "depot/testing-fixtures",
@@ -296,7 +295,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/2713cfdbc087b18ab8d586de126bedf538532010",
+                "url": "https://api.github.com/repos/monii/monii-reflection-properties-serializer/zipball/afe4c67f03cec53b6ac3bd2c20119be949f2a10a",
                 "reference": "2713cfdbc087b18ab8d586de126bedf538532010",
                 "shasum": ""
             },
