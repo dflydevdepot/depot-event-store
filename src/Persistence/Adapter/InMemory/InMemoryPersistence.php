@@ -34,16 +34,16 @@ class InMemoryPersistence implements Persistence
         $this->metadataSerializer = $metadataSerializer;
     }
 
-    public function fetch(Contract $aggregateType, $aggregateId)
+    public function fetch(Contract $aggregateRootType, $aggregateRootId)
     {
         $eventEnvelopes = [];
 
         foreach ($this->records as $record) {
-            if ($aggregateType != $record->aggregateType) {
+            if ($aggregateRootType != $record->aggregateRootType) {
                 continue;
             }
 
-            if ($aggregateId != $record->aggregateId) {
+            if ($aggregateRootId != $record->aggregateRootId) {
                 continue;
             }
             $metadata = $record->metadataType
@@ -67,21 +67,21 @@ class InMemoryPersistence implements Persistence
 
     /**
      * @param CommitId $commitId
-     * @param Contract $aggregateType
-     * @param string $aggregateId
-     * @param int $expectedAggregateVersion
+     * @param Contract $aggregateRootType
+     * @param string $aggregateRootId
+     * @param int $expectedAggregateRootVersion
      * @param EventEnvelope[] $eventEnvelopes
      */
     public function commit(
         CommitId $commitId,
-        Contract $aggregateType,
-        $aggregateId,
-        $expectedAggregateVersion,
+        Contract $aggregateRootType,
+        $aggregateRootId,
+        $expectedAggregateRootVersion,
         array $eventEnvelopes
     ) {
-        $aggregateVersion = $this->versionFor($aggregateType, $aggregateId);
+        $aggregateRootVersion = $this->versionFor($aggregateRootType, $aggregateRootId);
 
-        if ($aggregateVersion !== $expectedAggregateVersion) {
+        if ($aggregateRootVersion !== $expectedAggregateRootVersion) {
             throw new OptimisticConcurrencyFailed();
         }
 
@@ -95,9 +95,9 @@ class InMemoryPersistence implements Persistence
 
             $record->commitId = $commitId;
             $record->utcCommittedTime = new \DateTimeImmutable('now');
-            $record->aggregateType = $aggregateType;
-            $record->aggregateId = $aggregateId;
-            $record->aggregateVersion = ++$aggregateVersion;
+            $record->aggregateRootType = $aggregateRootType;
+            $record->aggregateRootId = $aggregateRootId;
+            $record->aggregateRootVersion = ++$aggregateRootVersion;
             $record->eventType = $eventEnvelope->getEventType();
             $record->eventId = $eventEnvelope->getEventId();
             $record->event = $this->eventSerializer->serialize(
@@ -113,11 +113,11 @@ class InMemoryPersistence implements Persistence
         }
     }
 
-    private function versionFor(Contract $aggregateType, $aggregateId)
+    private function versionFor(Contract $aggregateRootType, $aggregateRootId)
     {
         $version = -1;
 
-        foreach ($this->fetch($aggregateType, $aggregateId) as $eventEnvelope) {
+        foreach ($this->fetch($aggregateRootType, $aggregateRootId) as $eventEnvelope) {
             if ($eventEnvelope->getVersion() > $version) {
                 $version = $eventEnvelope->getVersion();
             }

@@ -20,9 +20,11 @@ class EventStoreTest extends TestCase
         $this->contractResolver = new SimplePhpFqcnContractResolver();
     }
 
-    private function createEventEnvelope($eventId, $event, $version)
+    private function createEventEnvelope($aggregateRootType, $aggregateRootId, $eventId, $event, $version)
     {
         return new EventEnvelope(
+            $aggregateRootType,
+            $aggregateRootId,
             $this->contractResolver->resolveFromObject($event),
             $eventId,
             $event,
@@ -35,6 +37,8 @@ class EventStoreTest extends TestCase
         $this->setUpContractResolver();
 
         $contract = $this->contractResolver->resolveFromClassName(Account::class);
+        $aggregateRootId = 123;
+        $eventId = 456;
 
         $persistence = $this->getMockBuilder(Persistence::class)
             ->getMock();
@@ -45,10 +49,12 @@ class EventStoreTest extends TestCase
 
         $eventStore = new EventStore($persistence);
 
-        $eventStream = $eventStore->create($contract, 123);
+        $eventStream = $eventStore->create($contract, $aggregateRootId);
 
         $appendedEventEnvelope = $this->createEventEnvelope(
-            123,
+            $contract,
+            $aggregateRootId,
+            $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
         );
@@ -65,9 +71,14 @@ class EventStoreTest extends TestCase
         $this->setUpContractResolver();
 
         $contract = $this->contractResolver->resolveFromClassName(Account::class);
+        $aggregateRootId = 123;
+        $eventId = 456;
+        $secondEventId = 789;
 
         $existingEventEnvelope = $this->createEventEnvelope(
-            123,
+            $contract,
+            $aggregateRootId,
+            $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
         );
@@ -78,15 +89,17 @@ class EventStoreTest extends TestCase
         $persistence
             ->expects($this->once())
             ->method('fetch')
-            ->with($this->equalTo($contract), $this->equalTo(123))
+            ->with($this->equalTo($contract), $this->equalTo($aggregateRootId))
             ->will($this->returnValue([$existingEventEnvelope]));
 
         $eventStore = new EventStore($persistence);
 
-        $eventStream = $eventStore->open($contract, 123);
+        $eventStream = $eventStore->open($contract, $aggregateRootId);
 
         $appendedEventEnvelope = $this->createEventEnvelope(
-            124,
+            $contract,
+            $aggregateRootId,
+            $secondEventId,
             new AccountBalanceIncreased('fixture-account-000', 10),
             1
         );

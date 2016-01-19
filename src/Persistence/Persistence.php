@@ -9,17 +9,17 @@ use Depot\EventStore\Transaction\CommitId;
 interface Persistence
 {
     /**
-     * @param Contract $aggregateType
-     * @param string $aggregateId
+     * @param Contract $aggregateRootType
+     * @param string $aggregateRootId
      * @return EventEnvelope[]
      */
-    public function fetch(Contract $aggregateType, $aggregateId);
+    public function fetch(Contract $aggregateRootType, $aggregateRootId);
 
     public function commit(
         CommitId $commitId,
-        Contract $aggregateType,
-        $aggregateId,
-        $expectedAggregateVersion,
+        Contract $aggregateRootType,
+        $aggregateRootId,
+        $expectedAggregateRootVersion,
         array $eventEnvelopes
     );
 }

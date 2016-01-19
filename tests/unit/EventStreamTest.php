@@ -21,9 +21,11 @@ class EventStreamTest extends TestCase
         $this->contractResolver = new SimplePhpFqcnContractResolver();
     }
 
-    private function createEventEnvelope($eventId, $event, $version)
+    private function createEventEnvelope($aggregateRootType, $aggregateRootId, $eventId, $event, $version)
     {
         return new EventEnvelope(
+            $aggregateRootType,
+            $aggregateRootId,
             $this->contractResolver->resolveFromObject($event),
             $eventId,
             $event,
@@ -36,6 +38,8 @@ class EventStreamTest extends TestCase
         $this->setUpContractResolver();
 
         $contract = $this->contractResolver->resolveFromClassName(Account::class);
+        $aggregateRootId = 123;
+        $eventId = 456;
 
         $persistence = $this->getMockBuilder(Persistence::class)
             ->getMock();
@@ -44,10 +48,12 @@ class EventStreamTest extends TestCase
             ->expects($this->never())
             ->method('fetch');
 
-        $eventStream = EventStream::create($persistence, $contract, 123);
+        $eventStream = EventStream::create($persistence, $contract, $aggregateRootId);
 
         $appendedEventEnvelope = $this->createEventEnvelope(
-            123,
+            $contract,
+            $aggregateRootId,
+            $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
         );
@@ -64,9 +70,14 @@ class EventStreamTest extends TestCase
         $this->setUpContractResolver();
 
         $contract = $this->contractResolver->resolveFromClassName(Account::class);
+        $aggregateRootId = 123;
+        $eventId = 456;
+        $secondEventId = 789;
 
         $existingEventEnvelope = $this->createEventEnvelope(
-            123,
+            $contract,
+            $aggregateRootId,
+            $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
         );
@@ -80,10 +91,12 @@ class EventStreamTest extends TestCase
             ->with($this->equalTo($contract), $this->equalTo(123))
             ->will($this->returnValue([$existingEventEnvelope]));
 
-        $eventStream = EventStream::open($persistence, $contract, 123);
+        $eventStream = EventStream::open($persistence, $contract, $aggregateRootId);
 
         $appendedEventEnvelope = $this->createEventEnvelope(
-            124,
+            $contract,
+            $aggregateRootId,
+            $secondEventId,
             new AccountBalanceIncreased('fixture-account-000', 10),
             1
         );
@@ -101,15 +114,22 @@ class EventStreamTest extends TestCase
         $this->setUpContractResolver();
 
         $contract = $this->contractResolver->resolveFromClassName(Account::class);
+        $aggregateRootId = 123;
+        $eventId = 456;
+        $secondEventId = 789;
 
         $appendedEventEnvelopeOne = $this->createEventEnvelope(
-            123,
+            $contract,
+            $aggregateRootId,
+            $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
         );
 
         $appendedEventEnvelopeTwo = $this->createEventEnvelope(
-            124,
+            $contract,
+            $aggregateRootId,
+            $secondEventId,
             new AccountWasOpened('fixture-account-001', 35),
             1
         );
@@ -123,7 +143,7 @@ class EventStreamTest extends TestCase
         $persistence = $this->getMockBuilder(Persistence::class)
             ->getMock();
 
-        $eventStream = EventStream::create($persistence, $contract, 123);
+        $eventStream = EventStream::create($persistence, $contract, $aggregateRootId);
 
         $persistence
             ->expects($this->exactly(2))
