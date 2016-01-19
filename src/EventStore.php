@@ -26,22 +26,22 @@ class EventStore
         $this->eventEnvelopeDecorator = $eventEnvelopeDecorator;
     }
 
-    public function create(Contract $aggregateType, $aggregateId)
+    public function create(Contract $aggregateRootType, $aggregateRootId)
     {
         return EventStream::create(
             $this->persistence,
-            $aggregateType,
-            $aggregateId,
+            $aggregateRootType,
+            $aggregateRootId,
             $this->eventEnvelopeDecorator
         );
     }
 
-    public function open(Contract $aggregateType, $aggregateId)
+    public function open(Contract $aggregateRootType, $aggregateRootId)
     {
         return EventStream::open(
             $this->persistence,
-            $aggregateType,
-            $aggregateId,
+            $aggregateRootType,
+            $aggregateRootId,
             $this->eventEnvelopeDecorator
         );
     }

@@ -21,17 +21,17 @@ class InMemoryPersistenceRecord
     /**
      * @var Contract
      */
-    public $aggregateType;
+    public $aggregateRootType;
 
     /**
      * @var string
      */
-    public $aggregateId;
+    public $aggregateRootId;
 
     /**
      * @var int
      */
-    public $aggregateVersion;
+    public $aggregateRootVersion;
 
     /**
      * @var Contract

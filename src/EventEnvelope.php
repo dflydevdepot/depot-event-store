@@ -10,6 +10,16 @@ class EventEnvelope
     /**
      * @var Contract
      */
+    private $aggregateRootType;
+
+    /**
+     * @var string
+     */
+    private $aggregateRootId;
+
+    /**
+     * @var Contract
+     */
     private $eventType;
 
     /**
@@ -43,6 +53,8 @@ class EventEnvelope
     private $when;
 
     public function __construct(
+        Contract $aggregateRootType,
+        $aggregateRootId,
         Contract $eventType,
         $eventId,
         $event,
@@ -51,6 +63,8 @@ class EventEnvelope
         $metadataType = null,
         $metadata = null
     ) {
+        $this->aggregateRootType = $aggregateRootType;
+        $this->aggregateRootId = $aggregateRootId;
         $this->eventType = $eventType;
         $this->eventId = $eventId;
         $this->event = $event;
@@ -58,6 +72,22 @@ class EventEnvelope
         $this->when = $when ?: new DateTimeImmutable('now');
         $this->metadataType = $metadataType;
         $this->metadata = $metadata;
+    }
+
+    /**
+     * @return Contract
+     */
+    public function getAggregateRootType()
+    {
+        return $this->aggregateRootType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAggregateRootId()
+    {
+        return $this->aggregateRootId;
     }
 
     /**

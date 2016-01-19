@@ -17,12 +17,12 @@ class EventStream
     /**
      * @var Contract
      */
-    private $aggregateType;
+    private $aggregateRootType;
 
     /**
      * @var string
      */
-    private $aggregateId;
+    private $aggregateRootId;
 
     /**
      * @var EventEnvelopeDecorator
@@ -41,42 +41,42 @@ class EventStream
 
     private function __construct(
         Persistence $persistence,
-        Contract $aggregateType = null,
-        $aggregateId = null,
+        Contract $aggregateRootType = null,
+        $aggregateRootId = null,
         EventEnvelopeDecorator $eventEnvelopeDecorator = null
     ) {
         $this->persistence = $persistence;
-        $this->aggregateType = $aggregateType;
-        $this->aggregateId = $aggregateId;
+        $this->aggregateRootType = $aggregateRootType;
+        $this->aggregateRootId = $aggregateRootId;
         $this->eventEnvelopeDecorator = $eventEnvelopeDecorator;
     }
 
     public static function create(
         Persistence $persistence,
-        Contract $aggregateType,
-        $aggregateId,
+        Contract $aggregateRootType,
+        $aggregateRootId,
         EventEnvelopeDecorator $eventEnvelopeDecorator = null
     ) {
-        $instance = new self($persistence, $aggregateType, $aggregateId, $eventEnvelopeDecorator);
+        $instance = new self($persistence, $aggregateRootType, $aggregateRootId, $eventEnvelopeDecorator);
 
         return $instance;
     }
 
     /**
      * @param Persistence $persistence
-     * @param Contract $aggregateType
-     * @param $aggregateId
+     * @param Contract $aggregateRootType
+     * @param $aggregateRootId
      *
      * @return EventStream
      */
     public static function open(
         Persistence $persistence,
-        Contract $aggregateType,
-        $aggregateId,
+        Contract $aggregateRootType,
+        $aggregateRootId,
         EventEnvelopeDecorator $eventEnvelopeDecorator = null
     ) {
-        $instance = new self($persistence, $aggregateType, $aggregateId, $eventEnvelopeDecorator);
-        $instance->committedEventEnvelopes = $persistence->fetch($aggregateType, $aggregateId);
+        $instance = new self($persistence, $aggregateRootType, $aggregateRootId, $eventEnvelopeDecorator);
+        $instance->committedEventEnvelopes = $persistence->fetch($aggregateRootType, $aggregateRootId);
 
         return $instance;
     }
@@ -126,8 +126,8 @@ class EventStream
 
         $this->persistence->commit(
             $commitId,
-            $this->aggregateType,
-            $this->aggregateId,
+            $this->aggregateRootType,
+            $this->aggregateRootId,
             count($this->committedEventEnvelopes) - 1,
             $pendingEventEnvelopes
         );
