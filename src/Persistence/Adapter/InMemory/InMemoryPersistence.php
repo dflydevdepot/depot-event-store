@@ -52,6 +52,8 @@ class InMemoryPersistence implements Persistence
             ;
 
             $eventEnvelopes[] = new EventEnvelope(
+                $aggregateRootType,
+                $aggregateRootId,
                 $record->eventType,
                 $record->eventId,
                 $this->eventSerializer->deserialize($record->eventType, $record->event),
