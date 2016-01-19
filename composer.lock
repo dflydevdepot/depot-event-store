@@ -4,7 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5bf18754d548951fa87db7243f8c1c2f",
+    "hash": "dc014ba8e0568f4b4f49791655fffc97",
+    "content-hash": "39d433d5035fc609a04489f316c217c8",
     "packages": [
         {
             "name": "depot/contract",
