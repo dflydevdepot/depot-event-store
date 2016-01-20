@@ -131,12 +131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/depot/depot-testing-event-store-persistence.git",
-                "reference": "e002cb20a2009a1e04228cf874300ade51fb6b1f"
+                "reference": "0d09c2492f4dce368e76caf1fc2a8c05d542b59a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/e002cb20a2009a1e04228cf874300ade51fb6b1f",
-                "reference": "e002cb20a2009a1e04228cf874300ade51fb6b1f",
+                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/0d09c2492f4dce368e76caf1fc2a8c05d542b59a",
+                "reference": "0d09c2492f4dce368e76caf1fc2a8c05d542b59a",
                 "shasum": ""
             },
             "require": {
@@ -179,7 +179,7 @@
             ],
             "description": "Testing support for Depot Event Store Persistence implementations",
             "homepage": "http://depot.io",
-            "time": "2016-01-20 10:40:45"
+            "time": "2016-01-20 18:02:22"
         },
         {
             "name": "depot/testing-fixtures",
