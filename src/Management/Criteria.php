@@ -2,6 +2,7 @@
 
 namespace Depot\EventStore\Management;
 
+use Depot\EventStore\Management\Error\CriteriaNotSupported;
 use Depot\EventStore\Persistence\CommittedEvent;
 
 class Criteria

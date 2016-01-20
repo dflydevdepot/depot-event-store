@@ -4,7 +4,7 @@ namespace Depot\EventStore;
 
 use Depot\EventStore\Persistence\CommittedEvent;
 
-class CallableEventVisitor implements EventVisitor
+class CallableCommittedEventVisitor implements CommittedEventVisitor
 {
     /**
      * @var callable

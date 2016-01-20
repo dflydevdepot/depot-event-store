@@ -2,9 +2,9 @@
 
 namespace Depot\EventStore\Management;
 
-use Depot\EventStore\EventVisitor;
+use Depot\EventStore\CommittedEventVisitor;
 
 interface EventStoreManagement
 {
-    public function visitEvents(Criteria $criteria, EventVisitor $eventVisitor);
+    public function visitCommittedEvents(Criteria $criteria, CommittedEventVisitor $committedEventVisitor);
 }

@@ -4,7 +4,7 @@ namespace Depot\EventStore\Persistence\Adapter\InMemory;
 
 use Depot\Contract\Contract;
 use Depot\EventStore\EventEnvelope;
-use Depot\EventStore\EventVisitor;
+use Depot\EventStore\CommittedEventVisitor;
 use Depot\EventStore\Management\Criteria;
 use Depot\EventStore\Management\EventStoreManagement;
 use Depot\EventStore\Persistence\CommittedEvent;
@@ -62,13 +62,13 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
         return $eventEnvelopes;
     }
 
-    public function visitEvents(Criteria $criteria, EventVisitor $eventVisitor)
+    public function visitCommittedEvents(Criteria $criteria, CommittedEventVisitor $committedEventVisitor)
     {
         foreach ($this->records as $record) {
                 if (! $criteria->isMatchedBy($record)) {
                     continue;
                 }
-                $eventVisitor->doWithCommittedEvent($record);
+            $committedEventVisitor->doWithCommittedEvent($record);
         }
     }
 
