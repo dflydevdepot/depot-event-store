@@ -65,9 +65,9 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
     public function visitCommittedEvents(Criteria $criteria, CommittedEventVisitor $committedEventVisitor)
     {
         foreach ($this->records as $record) {
-                if (! $criteria->isMatchedBy($record)) {
-                    continue;
-                }
+            if (! $criteria->isMatchedBy($record)) {
+                continue;
+            }
             $committedEventVisitor->doWithCommittedEvent($record);
         }
     }
