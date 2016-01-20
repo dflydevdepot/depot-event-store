@@ -10,11 +10,6 @@ use Depot\EventStore\Transaction\CommitId;
 class CommittedEvent
 {
     /**
-     * @var int
-     */
-    private $committedEventId;
-
-    /**
      * @var CommitId
      */
     private $commitId;
@@ -46,7 +41,6 @@ class CommittedEvent
 
     /**
      * CommittedEvent constructor.
-     * @param int $committedEventId
      * @param CommitId $commitId
      * @param DateTimeImmutable $utcCommittedTime
      * @param Contract $aggregateRootType
@@ -55,7 +49,6 @@ class CommittedEvent
      * @param EventEnvelope $eventEnvelope
      */
     public function __construct(
-        $committedEventId,
         CommitId $commitId,
         DateTimeImmutable $utcCommittedTime,
         Contract $aggregateRootType,
@@ -63,21 +56,12 @@ class CommittedEvent
         $aggregateRootVersion,
         EventEnvelope $eventEnvelope
     ) {
-        $this->committedEventId = $committedEventId;
         $this->commitId = $commitId;
         $this->utcCommittedTime = $utcCommittedTime;
         $this->aggregateRootType = $aggregateRootType;
         $this->aggregateRootId = $aggregateRootId;
         $this->aggregateRootVersion = $aggregateRootVersion;
         $this->eventEnvelope = $eventEnvelope;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCommittedEventId()
-    {
-        return $this->committedEventId;
     }
 
     /**

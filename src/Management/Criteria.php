@@ -2,14 +2,14 @@
 
 namespace Depot\EventStore\Management;
 
-use Depot\EventStore\Management\Error\CriteriaNotSupported;
+use Depot\Contract\Contract;
 use Depot\EventStore\Persistence\CommittedEvent;
 
 class Criteria
 {
     private $aggregateRootTypes = array();
     private $aggregateRootIds = array();
-    private $eventTypes = array();
+    private $eventTypeContractNames = array();
 
     /**
      * @param array $aggregateRootTypes
@@ -36,14 +36,15 @@ class Criteria
     }
 
     /**
-     * @param array $eventTypes
+     * @param Contract[] $eventTypes
      * @return Criteria
      */
     public function withEventTypes(array $eventTypes)
     {
         $instance = clone($this);
-        $instance->eventTypes = $eventTypes;
-
+        $instance->eventTypeContractNames = array_map(function (Contract $eventType) {
+            return $eventType->getContractName();
+        }, $eventTypes);
         return $instance;
     }
 
@@ -66,9 +67,9 @@ class Criteria
     /**
      * @return array
      */
-    public function getEventTypes()
+    public function getEventTypeContractNames()
     {
-        return $this->eventTypes;
+        return $this->eventTypeContractNames;
     }
 
     /**
@@ -85,17 +86,11 @@ class Criteria
      */
     public function isMatchedBy(CommittedEvent $committedEvent)
     {
-        if ($this->aggregateRootTypes) {
-            throw new CriteriaNotSupported(
-                'Cannot match criteria based on aggregate root types.'
-            );
-        }
-
         if ($this->aggregateRootIds && ! in_array($committedEvent->getAggregateRootId(), $this->aggregateRootIds)) {
             return false;
         }
 
-        if ($this->eventTypes && ! in_array($committedEvent->getEventEnvelope()->getEventType(), $this->eventTypes)) {
+        if ($this->eventTypeContractNames && ! in_array($committedEvent->getEventEnvelope()->getEventType()->getContractName(), $this->eventTypeContractNames)) {
             return false;
         }
 

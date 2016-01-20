@@ -30,11 +30,6 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
      */
     private $records = [];
 
-    /**
-     * @var int
-     */
-    private $lastCommittedEventId = -1;
-
     public function __construct(
         Serializer $eventSerializer,
         Serializer $metadataSerializer
@@ -78,15 +73,19 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
      * @param string $aggregateRootId
      * @param int $expectedAggregateRootVersion
      * @param EventEnvelope[] $eventEnvelopes
+     * @param \DateTimeImmutable|null $now
      */
     public function commit(
         CommitId $commitId,
         Contract $aggregateRootType,
         $aggregateRootId,
         $expectedAggregateRootVersion,
-        array $eventEnvelopes
+        array $eventEnvelopes,
+        $now = null
     ) {
         $aggregateRootVersion = $this->versionFor($aggregateRootType, $aggregateRootId);
+
+        if (! $now) { $now = new \DateTimeImmutable('now'); }
 
         if ($aggregateRootVersion !== $expectedAggregateRootVersion) {
             throw new OptimisticConcurrencyFailed();
@@ -95,9 +94,8 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
         foreach ($eventEnvelopes as $eventEnvelope) {
 
             $record = new CommittedEvent(
-                ++$this->lastCommittedEventId,
                 $commitId,
-                new \DateTimeImmutable('now'),
+                $now,
                 $aggregateRootType,
                 $aggregateRootId,
                 $aggregateRootVersion,

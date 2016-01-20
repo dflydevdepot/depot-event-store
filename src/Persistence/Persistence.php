@@ -20,6 +20,7 @@ interface Persistence
         Contract $aggregateRootType,
         $aggregateRootId,
         $expectedAggregateRootVersion,
-        array $eventEnvelopes
+        array $eventEnvelopes,
+        $now = null
     );
 }
