@@ -90,7 +90,10 @@ class Criteria
             return false;
         }
 
-        if ($this->eventTypeContractNames && ! in_array($committedEvent->getEventEnvelope()->getEventType()->getContractName(), $this->eventTypeContractNames)) {
+        if ($this->eventTypeContractNames && ! in_array(
+            $committedEvent->getEventEnvelope()->getEventType()->getContractName(),
+            $this->eventTypeContractNames
+        )) {
             return false;
         }
 

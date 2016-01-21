@@ -85,7 +85,9 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
     ) {
         $aggregateRootVersion = $this->versionFor($aggregateRootType, $aggregateRootId);
 
-        if (! $now) { $now = new \DateTimeImmutable('now'); }
+        if (! $now) {
+            $now = new \DateTimeImmutable('now');
+        }
 
         if ($aggregateRootVersion !== $expectedAggregateRootVersion) {
             throw new OptimisticConcurrencyFailed();
