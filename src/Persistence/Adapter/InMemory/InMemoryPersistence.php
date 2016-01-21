@@ -4,12 +4,16 @@ namespace Depot\EventStore\Persistence\Adapter\InMemory;
 
 use Depot\Contract\Contract;
 use Depot\EventStore\EventEnvelope;
+use Depot\EventStore\CommittedEventVisitor;
+use Depot\EventStore\Management\Criteria;
+use Depot\EventStore\Management\EventStoreManagement;
+use Depot\EventStore\Persistence\CommittedEvent;
 use Depot\EventStore\Persistence\OptimisticConcurrencyFailed;
 use Depot\EventStore\Persistence\Persistence;
 use Depot\EventStore\Serialization\Serializer;
 use Depot\EventStore\Transaction\CommitId;
 
-class InMemoryPersistence implements Persistence
+class InMemoryPersistence implements Persistence, EventStoreManagement
 {
     /**
      * @var Serializer
@@ -22,7 +26,7 @@ class InMemoryPersistence implements Persistence
     private $metadataSerializer;
 
     /**
-     * @var InMemoryPersistenceRecord[]
+     * @var CommittedEvent[]
      */
     private $records = [];
 
@@ -39,32 +43,28 @@ class InMemoryPersistence implements Persistence
         $eventEnvelopes = [];
 
         foreach ($this->records as $record) {
-            if ($aggregateRootType != $record->aggregateRootType) {
+            if ($aggregateRootType != $record->getAggregateRootType()) {
                 continue;
             }
 
-            if ($aggregateRootId != $record->aggregateRootId) {
+            if ($aggregateRootId != $record->getAggregateRootId()) {
                 continue;
             }
-            $metadata = $record->metadataType
-                ? $this->metadataSerializer->deserialize($record->metadataType, $record->metadata)
-                : null
-            ;
 
-            $eventEnvelopes[] = new EventEnvelope(
-                $aggregateRootType,
-                $aggregateRootId,
-                $record->eventType,
-                $record->eventId,
-                $this->eventSerializer->deserialize($record->eventType, $record->event),
-                $record->version,
-                $record->when,
-                $record->metadataType,
-                $metadata
-            );
+            $eventEnvelopes[] = $record->getEventEnvelope();
         }
 
         return $eventEnvelopes;
+    }
+
+    public function visitCommittedEvents(Criteria $criteria, CommittedEventVisitor $committedEventVisitor)
+    {
+        foreach ($this->records as $record) {
+            if (! $criteria->isMatchedBy($record)) {
+                continue;
+            }
+            $committedEventVisitor->doWithCommittedEvent($record);
+        }
     }
 
     /**
@@ -73,15 +73,21 @@ class InMemoryPersistence implements Persistence
      * @param string $aggregateRootId
      * @param int $expectedAggregateRootVersion
      * @param EventEnvelope[] $eventEnvelopes
+     * @param \DateTimeImmutable|null $now
      */
     public function commit(
         CommitId $commitId,
         Contract $aggregateRootType,
         $aggregateRootId,
         $expectedAggregateRootVersion,
-        array $eventEnvelopes
+        array $eventEnvelopes,
+        $now = null
     ) {
         $aggregateRootVersion = $this->versionFor($aggregateRootType, $aggregateRootId);
+
+        if (! $now) {
+            $now = new \DateTimeImmutable('now');
+        }
 
         if ($aggregateRootVersion !== $expectedAggregateRootVersion) {
             throw new OptimisticConcurrencyFailed();
@@ -89,27 +95,14 @@ class InMemoryPersistence implements Persistence
 
         foreach ($eventEnvelopes as $eventEnvelope) {
 
-            $metadata = $eventEnvelope->getMetadataType()
-                ? $this->metadataSerializer->serialize($eventEnvelope->getMetadataType(), $eventEnvelope->getMetadata())
-                : null
-            ;
-            $record = new InMemoryPersistenceRecord();
-
-            $record->commitId = $commitId;
-            $record->utcCommittedTime = new \DateTimeImmutable('now');
-            $record->aggregateRootType = $aggregateRootType;
-            $record->aggregateRootId = $aggregateRootId;
-            $record->aggregateRootVersion = ++$aggregateRootVersion;
-            $record->eventType = $eventEnvelope->getEventType();
-            $record->eventId = $eventEnvelope->getEventId();
-            $record->event = $this->eventSerializer->serialize(
-                $eventEnvelope->getEventType(),
-                $eventEnvelope->getEvent()
+            $record = new CommittedEvent(
+                $commitId,
+                $now,
+                $aggregateRootType,
+                $aggregateRootId,
+                $aggregateRootVersion,
+                $eventEnvelope
             );
-            $record->version = $eventEnvelope->getVersion();
-            $record->when = $eventEnvelope->getWhen();
-            $record->metadataType = $eventEnvelope->getMetadataType();
-            $record->metadata = $metadata;
 
             $this->records[] = $record;
         }

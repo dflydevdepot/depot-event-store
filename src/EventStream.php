@@ -111,10 +111,11 @@ class EventStream
 
     /**
      * @param CommitId $commitId
+     * @param \DateTimeImmutable|null $now
      *
      * @return void
      */
-    public function commit(CommitId $commitId)
+    public function commit(CommitId $commitId, $now = null)
     {
         $pendingEventEnvelopes = $this->pendingEventEnvelopes;
 
@@ -129,7 +130,8 @@ class EventStream
             $this->aggregateRootType,
             $this->aggregateRootId,
             count($this->committedEventEnvelopes) - 1,
-            $pendingEventEnvelopes
+            $pendingEventEnvelopes,
+            $now
         );
 
         $this->committedEventEnvelopes = array_merge($this->committedEventEnvelopes, $pendingEventEnvelopes);

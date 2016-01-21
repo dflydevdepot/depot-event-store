@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "dc014ba8e0568f4b4f49791655fffc97",
+    "hash": "5bf18754d548951fa87db7243f8c1c2f",
     "content-hash": "39d433d5035fc609a04489f316c217c8",
     "packages": [
         {
@@ -131,12 +131,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/depot/depot-testing-event-store-persistence.git",
-                "reference": "8b3cf513721fac6dc1b73d0dabf0d77009947820"
+                "reference": "0d09c2492f4dce368e76caf1fc2a8c05d542b59a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/8b3cf513721fac6dc1b73d0dabf0d77009947820",
-                "reference": "8b3cf513721fac6dc1b73d0dabf0d77009947820",
+                "url": "https://api.github.com/repos/depot/depot-testing-event-store-persistence/zipball/0d09c2492f4dce368e76caf1fc2a8c05d542b59a",
+                "reference": "0d09c2492f4dce368e76caf1fc2a8c05d542b59a",
                 "shasum": ""
             },
             "require": {
@@ -179,7 +179,7 @@
             ],
             "description": "Testing support for Depot Event Store Persistence implementations",
             "homepage": "http://depot.io",
-            "time": "2016-01-19 15:43:03"
+            "time": "2016-01-20 18:02:22"
         },
         {
             "name": "depot/testing-fixtures",

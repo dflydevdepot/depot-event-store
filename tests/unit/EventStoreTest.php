@@ -20,11 +20,9 @@ class EventStoreTest extends TestCase
         $this->contractResolver = new SimplePhpFqcnContractResolver();
     }
 
-    private function createEventEnvelope($aggregateRootType, $aggregateRootId, $eventId, $event, $version)
+    private function createEventEnvelope($eventId, $event, $version)
     {
         return new EventEnvelope(
-            $aggregateRootType,
-            $aggregateRootId,
             $this->contractResolver->resolveFromObject($event),
             $eventId,
             $event,
@@ -52,8 +50,6 @@ class EventStoreTest extends TestCase
         $eventStream = $eventStore->create($aggregateRootType, $aggregateRootId);
 
         $appendedEventEnvelope = $this->createEventEnvelope(
-            $aggregateRootType,
-            $aggregateRootId,
             $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
@@ -76,8 +72,6 @@ class EventStoreTest extends TestCase
         $secondEventId = 789;
 
         $existingEventEnvelope = $this->createEventEnvelope(
-            $aggregateRootType,
-            $aggregateRootId,
             $eventId,
             new AccountWasOpened('fixture-account-000', 25),
             0
@@ -97,8 +91,6 @@ class EventStoreTest extends TestCase
         $eventStream = $eventStore->open($aggregateRootType, $aggregateRootId);
 
         $appendedEventEnvelope = $this->createEventEnvelope(
-            $aggregateRootType,
-            $aggregateRootId,
             $secondEventId,
             new AccountBalanceIncreased('fixture-account-000', 10),
             1
