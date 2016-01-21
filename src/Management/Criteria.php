@@ -7,19 +7,23 @@ use Depot\EventStore\Persistence\CommittedEvent;
 
 class Criteria
 {
-    private $aggregateRootTypes = array();
-    private $aggregateRootIds = array();
-    private $eventTypeContractNames = array();
+    private $aggregateRootTypes = [];
+    private $aggregateRootTypeContractNames = [];
+    private $aggregateRootIds = [];
+    private $eventTypes = [];
+    private $eventTypeContractNames = [];
 
     /**
-     * @param array $aggregateRootTypes
-     * @return static
+     * @param Contract[] $aggregateRootTypes
+     * @return Criteria
      */
     public function withAggregateRootTypes(array $aggregateRootTypes)
     {
         $instance = clone($this);
         $instance->aggregateRootTypes = $aggregateRootTypes;
-
+        $instance->aggregateRootTypeContractNames = array_map(function (Contract $aggregateRootType) {
+            return $aggregateRootType->getContractName();
+        }, $aggregateRootTypes);
         return $instance;
     }
 
@@ -42,6 +46,7 @@ class Criteria
     public function withEventTypes(array $eventTypes)
     {
         $instance = clone($this);
+        $instance->eventTypes = $eventTypes;
         $instance->eventTypeContractNames = array_map(function (Contract $eventType) {
             return $eventType->getContractName();
         }, $eventTypes);
@@ -67,9 +72,9 @@ class Criteria
     /**
      * @return array
      */
-    public function getEventTypeContractNames()
+    public function getEventTypes()
     {
-        return $this->eventTypeContractNames;
+        return $this->eventTypes;
     }
 
     /**
@@ -86,6 +91,14 @@ class Criteria
      */
     public function isMatchedBy(CommittedEvent $committedEvent)
     {
+
+        if ($this->aggregateRootTypeContractNames && ! in_array(
+                $committedEvent->getAggregateRootType()->getContractName(),
+                $this->aggregateRootTypeContractNames
+            )) {
+            return false;
+        }
+
         if ($this->aggregateRootIds && ! in_array($committedEvent->getAggregateRootId(), $this->aggregateRootIds)) {
             return false;
         }
