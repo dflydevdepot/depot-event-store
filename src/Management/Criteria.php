@@ -93,9 +93,9 @@ class Criteria
     {
 
         if ($this->aggregateRootTypeContractNames && ! in_array(
-                $committedEvent->getAggregateRootType()->getContractName(),
-                $this->aggregateRootTypeContractNames
-            )) {
+            $committedEvent->getAggregateRootType()->getContractName(),
+            $this->aggregateRootTypeContractNames
+        )) {
             return false;
         }
 
