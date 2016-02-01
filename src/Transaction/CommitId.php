@@ -4,6 +4,9 @@ namespace Depot\EventStore\Transaction;
 
 class CommitId
 {
+    /**
+     * @var string
+     */
     private $commitId;
 
     private function __construct($commitId)
