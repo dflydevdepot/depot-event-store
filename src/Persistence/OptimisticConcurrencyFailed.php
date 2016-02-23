@@ -6,6 +6,12 @@ use RuntimeException;
 
 class OptimisticConcurrencyFailed extends RuntimeException
 {
+    public function __construct($aggregateRootType, $aggregateRootId, $message = null, \Exception $previous = null)
+    {
+        $formattedMessage = sprintf('%s (%s:%s)', $message, $aggregateRootType, $aggregateRootId);
+        parent::__construct($formattedMessage, 0, $previous);
+    }
+
     public static function becauseExpectedAggregateRootVersionDoesNotMatch(
         $expectedAggregateRootVersion,
         $actualAggregateRootVersion
