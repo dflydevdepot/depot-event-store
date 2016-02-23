@@ -90,13 +90,15 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
         }
 
         if ($aggregateRootVersion !== $expectedAggregateRootVersion) {
-            throw new OptimisticConcurrencyFailed($aggregateRootType->getContractName(),
+            throw new OptimisticConcurrencyFailed(
+                $aggregateRootType->getContractName(),
                 $aggregateRootId,
                 sprintf(
                     'Expected aggregate root version %d but found %d.',
                     $expectedAggregateRootVersion,
                     $aggregateRootVersion
-                ));
+                )
+            );
         }
 
         foreach ($eventEnvelopes as $eventEnvelope) {
