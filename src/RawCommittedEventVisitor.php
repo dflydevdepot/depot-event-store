@@ -1,6 +1,6 @@
 <?php
 
-namespace Depot\EventStore\Raw;
+namespace Depot\EventStore;
 
 interface RawCommittedEventVisitor
 {

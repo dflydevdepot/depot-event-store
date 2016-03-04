@@ -3,28 +3,28 @@
 namespace Depot\EventStore\Persistence;
 
 use Depot\Contract\Contract;
-use Depot\EventStore\EventEnvelope;
+use Depot\EventStore\RawEventEnvelope;
 use Depot\EventStore\Transaction\CommitId;
 
-interface Persistence
+interface RawPersistence
 {
     /**
      * @param Contract $aggregateRootType
      * @param string $aggregateRootId
-     * @return EventEnvelope[]
+     * @return RawEventEnvelope[]
      */
-    public function fetch(Contract $aggregateRootType, $aggregateRootId);
+    public function fetchRaw(Contract $aggregateRootType, $aggregateRootId);
 
     /**
      * @param CommitId $commitId
      * @param Contract $aggregateRootType
      * @param $aggregateRootId
      * @param $expectedAggregateRootVersion
-     * @param EventEnvelope[] $eventEnvelopes
+     * @param RawEventEnvelope[] $rawEventEnvelopes
      * @param null $now
      * @return mixed
      */
-    public function commit(
+    public function commitRaw(
         CommitId $commitId,
         Contract $aggregateRootType,
         $aggregateRootId,
