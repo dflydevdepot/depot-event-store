@@ -10,6 +10,7 @@ use Depot\EventStore\Management\EventStoreManagement;
 use Depot\EventStore\Persistence\CommittedEvent;
 use Depot\EventStore\Persistence\OptimisticConcurrencyFailed;
 use Depot\EventStore\Persistence\Persistence;
+use Depot\EventStore\Raw\RawCommittedEventVisitor;
 use Depot\EventStore\Serialization\Serializer;
 use Depot\EventStore\Transaction\CommitId;
 
@@ -57,8 +58,11 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
         return $eventEnvelopes;
     }
 
-    public function visitCommittedEvents(Criteria $criteria, CommittedEventVisitor $committedEventVisitor)
-    {
+    public function visitCommittedEvents(
+        Criteria $criteria,
+        CommittedEventVisitor $committedEventVisitor,
+        RawCommittedEventVisitor $fallbackRawCommittedEventVisitor = null
+    ) {
         foreach ($this->records as $record) {
             if (! $criteria->isMatchedBy($record)) {
                 continue;
@@ -66,6 +70,15 @@ class InMemoryPersistence implements Persistence, EventStoreManagement
             $committedEventVisitor->doWithCommittedEvent($record);
         }
     }
+
+    public function visitRawCommittedEvents(
+        Criteria $criteria,
+        RawCommittedEventVisitor $fallbackRawCommittedEventVisitor
+    ) {
+    
+        throw new \RuntimeException('Not yet implemented.');
+    }
+
 
     /**
      * @param CommitId $commitId
