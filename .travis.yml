@@ -16,6 +16,7 @@ cache:
 
 before_install:
     - composer self-update
+    - pip install codecov
 
 install:
     - composer --prefer-source install
@@ -23,7 +24,10 @@ install:
 script:
     - composer validate
     - ./vendor/bin/phpcs --standard=PSR2 src
-    - ./vendor/bin/phpunit --coverage-text --verbose
+    - ./vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --verbose
+
+after_success:
+    - codecov
 
 notifications:
     slack: monii:XmxGEoN5la6724Zjon4z9FeW
